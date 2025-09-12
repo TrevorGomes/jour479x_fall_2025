@@ -1,0 +1,25 @@
+```{r}
+library(tidyverse)
+```
+
+```{r}
+soccer <- read_csv("https://dwillis.github.io/sports-data-files/ncaa_womens_soccer_totals_2024.csv")
+```
+
+The Southwestern Athletic Conference is unrepresented in the national rankings and is often in the lower half of all Division I conferences by overall record. But on another list, the SWAC dominates.
+
+Prairie View, Mississippi Valley State and Alabama A&M were the top three women's soccer teams in the country in 2024 by the percentage of their shot attempts that were on goal. Arkansas-Pine Bluff - another SWAC member - ranked sixth. 
+
+Prairie View, which led the country in shot on goal percentage by over four percentage points, and Mississippi Valley State were the only teams to eclipse 60 percent.
+
+Only three of the 78 teams in the Power Five conferences even surpassed 50 percent.
+
+```{r}
+powerfive <- c("Big Ten", "ACC", "Big 12", "Big East", "SEC")
+
+soccer |> 
+  filter(conference_name %in% powerfive) |> 
+  mutate(SoGPct = (SoG/ShAtt)*100) |>
+  arrange(desc(SoGPct))
+```
+
