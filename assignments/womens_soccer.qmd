@@ -12,7 +12,7 @@ We'll want to start with 2025 match data, which is located in [this GitHub repos
 
 
 ```{r}
-matches_2025 <- read_csv("https://raw.githubusercontent.com/dwillis/NCAAWomensSoccerData/main/data/ncaa_womens_soccer_matchstats_2025.csv") |> mutate(diff = team_score - opponent_score)
+matches_2025 <- read_csv("https://raw.githubusercontent.com/dwillis/NCAAWomensSoccerData/main/data/ncaa_womens_soccer_matchstats_2025.csv") |> mutate(diff = team_score - opponent_score, total_goals =  goals + defensive_goals)
 ```
 
 Let's take a look at this data to see what it contains, using `head` and `glimpse`:
@@ -40,8 +40,29 @@ arrange(desc(pct_sog))
 2. What about the same shot stats from last season's first four games? You'll need to load the matches from 2024 - just change the season in the URL - and filter by date to find the first four games.
 
 ```{r}
-matches_2024 <- read_csv("https://raw.githubusercontent.com/dwillis/NCAAWomensSoccerData/main/data/ncaa_womens_soccer_matchstats_2024.csv")
+matches_2024 <- read_csv("https://raw.githubusercontent.com/dwillis/NCAAWomensSoccerData/main/data/ncaa_womens_soccer_matchstats_2024.csv") |> mutate(total_goals = goals + defensive_goals) |> filter(date < '2024-09-18') |> filter(team == 'Maryland Terrapins, Terps')
 ```
+
+```{r}
+t.test(matches_2024$total_goals, matches_2025$total_goals)
+```
+
+Based on this t-test, I would accept the null hypothesis because the p-value is far above 0.05, meaning the results are not statistically significant. The mean goals scored in games through September 18th in 2024 was 2.92, compared to 2.9 this year, a negligible difference. 
+
+
+```{r}
+matches_2024 <- read_csv("https://raw.githubusercontent.com/dwillis/NCAAWomensSoccerData/main/data/ncaa_womens_soccer_matchstats_2024.csv") |> mutate(total_goals = goals + defensive_goals) |> filter(date < '2024-09-18') |> filter(team == 'Maryland Terrapins, Terps')
+```
+
+```{r}
+matches_2025 <- read_csv("https://raw.githubusercontent.com/dwillis/NCAAWomensSoccerData/main/data/ncaa_womens_soccer_matchstats_2025.csv") |> mutate(total_goals = goals + defensive_goals) |> filter(team == 'Maryland Terrapins, Terps')
+```
+
+```{r}
+t.test(matches_2024$total_goals, matches_2025$total_goals)
+```
+
+The t-test yields similar results for only Maryland games. The p-value is considerably higher than 0.05, and the mean goals scored last year compared to this year are not significantly far apart.
 
 ```{r}
 firstfourgames <- c("2024-08-15", "2024-08-18", "2024-08-22", "2024-08-25")
