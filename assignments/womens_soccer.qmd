@@ -157,3 +157,65 @@ big10_matches |>
 The most newsworthy statistic I've noticed from these questions is the considerable disparity in shot attempts, shots on goal, and shots on goal percentage for Maryland women's soccer over the first four games of the 2024 season compared to the 2025 season. They've attempted more than double the shots and tallied over twice as many shots on goal this season than they did in 2024. Their shots on goal percentage also increased by two points. 
 
 This could be strong and engaging statistical evidence in a story about the overall difference between the team last year compared to this year. Or, it could illustrate how much more effective the offense has been in head coach Michael Marchiano's first year leading the program.
+
+
+## Correlations and regression
+
+```{r}
+correlations <- read_csv("https://raw.githubusercontent.com/dwillis/NCAAWomensSoccerData/main/data/ncaa_womens_soccer_matchstats_2024.csv")
+
+
+newcorrelations <- correlations |> 
+  mutate(
+    differential = goals - defensive_goals
+    )
+
+newcorrelations |> summarise(correlation = cor(differential, fouls, method="pearson"))
+
+newcorrelations |> summarise(correlation = cor(differential, yellow_cards, method="pearson"))
+
+fit <- lm(differential ~ fouls, data = newcorrelations)
+summary(fit)
+
+newcorrelations |> 
+  summarise(correlation = cor(differential, so_g, method="pearson"))
+
+
+net <- lm(differential ~ so_g, data = newcorrelations)
+summary(net)
+
+```
+
+## 2025 version
+
+```{r}
+correlations_2025 <- read_csv("https://raw.githubusercontent.com/dwillis/NCAAWomensSoccerData/main/data/ncaa_womens_soccer_matchstats_2025.csv")
+
+new_correlations_2025 <- correlations_2025 |> mutate(
+  differential = goals - defensive_goals
+)
+
+new_correlations_2025 |> summarise(correlation = cor(differential, corners, method="pearson"))
+
+net <- lm(differential ~ corners, data = new_correlations_2025)
+summary(net)
+
+umd_corner_correlations_2025 <- new_correlations_2025 |> mutate(
+  corner_diff = corners - defensive_corners
+) |> filter(team == "Maryland Terrapins, Terps")
+
+
+umd_corner_correlations_2025 |> mutate(
+  corner_diff_total = sum(corner_diff),
+  differential_total = sum(differential)
+) |> filter(team == "Maryland Terrapins, Terps")
+
+```
+
+## Story Pitch
+
+The outcomes of Maryland women's soccer games have been closely tied to the number of corner kicks they earn and concede to their opponent. The Terps have recorded more corners than their opponents in five of their six wins, while their opponent took more corners than them in all four of their losses. 
+
+Maryland's matches against Saint Francis and Florida are particularly telling. The Gators earned six more corners than Maryland in a decisive win over the Terps. In a 5-0 shellacking of Saint Francis, Maryland recorded six more corners than the Red Flash.
+
+This is supported by a moderately positive correlation between the number of corners a team earns and allows, and the number of goals that team scores and concedes.
