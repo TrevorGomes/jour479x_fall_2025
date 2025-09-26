@@ -1,0 +1,123 @@
+## Multiple Regression
+```{r}
+library(tidyverse)
+library(Hmisc)
+```
+```{r}
+logs <- read_csv("https://dwillis.github.io/sports-data-files/cbblogs1525.csv")
+```
+```{r}
+logs <- logs |> mutate(
+  Differential = TeamScore - OpponentScore, 
+  NetRebounds = TeamTotalRebounds - OpponentTotalRebounds,
+  TurnoverMargin = TeamTurnovers - OpponentTurnovers)
+
+rebounds <- lm(Differential ~ NetRebounds, data=logs)
+summary(rebounds)
+```
+
+```{r}
+model1 <- lm(Differential ~ NetRebounds + TurnoverMargin, data=logs)
+summary(model1)
+```
+
+```{r}
+simplelogs <- logs |> select_if(is.numeric) |> select(-Game) |> select(Differential, NetRebounds, TurnoverMargin, TeamFGPCT, TeamTotalRebounds, OpponentFGPCT, OpponentTotalRebounds)
+
+cormatrix <- rcorr(as.matrix(simplelogs))
+
+cormatrix$r
+```
+
+```{r}
+model2 <- lm(Differential ~ NetRebounds + TurnoverMargin + TeamFGPCT + OpponentFGPCT, data=logs)
+summary(model2)
+```
+
+```{r}
+logs |> 
+  filter(Team == "Michigan" & Season == '2020-2021' | Team == "Wisconsin" & Season == '2019-2020' | Team == "Michigan State" & Season == '2018-2019' | Team == "Michigan State" & Season == '2017-2018' | Team == 'Illinois' & Season == '2021-2022' | Team == 'Purdue' & Season == '2022-2023' | Team == 'Purdue' & Season == '2023-2024' | Team == "Michigan State" & Season == '2024-2025') |> 
+  summarise(
+    meanNetRebounds = mean(NetRebounds),
+    meanTurnoverMargin = mean(TurnoverMargin),
+    meanTeamFGPCT = mean(TeamFGPCT),
+    meanOpponentFGPCT = mean(OpponentFGPCT)
+  )
+```
+
+```{r}
+# (netrebounds estimate * meanNetRebounds) + (turnover margin estimate * meanTurnoverMargin) + (TeamFGPCT estimate * meanTeamFGPCT) + (OpponentFGPCT estimate * meanOpponentFGPCT) + Intercept
+(0.660276*9.432099) + (-1.315355*1.711934) + (91.472656*0.4745391) + (-91.705986*0.4000823) + 0.230468
+```
+
+```{r}
+logs |> 
+  filter(
+    Team == "Maryland" & Season == '2024-2025'
+    ) |> 
+  summarise(
+    meanNetRebounds = mean(NetRebounds),
+    meanTurnoverMargin = mean(TurnoverMargin),
+    meanTeamFGPCT = mean(TeamFGPCT),
+    meanOpponentFGPCT = mean(OpponentFGPCT)
+  )
+```
+
+```{r}
+logs |> 
+  filter(
+    Team == "Maryland" & Season == '2024-2025'
+    ) |> 
+  summarise(
+    meanNetRebounds = mean(NetRebounds),
+    meanTurnoverMargin = mean(TurnoverMargin),
+    meanTeamFGPCT = mean(TeamFGPCT),
+    meanOpponentFGPCT = mean(OpponentFGPCT)
+  )
+```
+
+```{r}
+logs |> 
+     filter(
+         Team == "Maryland" & Season == '2024-2025'
+     ) |> summarise(avg_score = mean(TeamScore), avg_opp = mean(OpponentScore))
+```
+
+A model I think would be useful is evaluating how accurately predictive steals, blocks, fouls, and turnovers are toward point differential. Essentially, how much does playing "clean" basketball and sound defense account for point differential in a given game. Limiting turnovers and forcing turnovers is obviously the most effective way to get clean possessions, which leads to more field goal attempts than the other team and more chances to score than the opposing team. Coaches often point to turnovers and fouls as reasons a team is playing "undisciplined" or "sloppy," and this model would determine how much these factors impact a game. A potential issue with this model could be outliers where a team loses the turnover battle, frequently fouls the opposing team, and racks up less blocks and steals, yet still has a hot shooting night and dominates.
+
+```{r}
+clean_basketball_model <- lm(Differential ~ TeamSteals + TeamBlocks + TeamTurnovers + TeamPersonalFouls, data = logs)
+summary(clean_basketball_model)
+```
+
+```{r}
+simple_clean_logs <- logs |> select_if(is.numeric) |> select(-Game) |> select(Differential, TeamSteals, TeamBlocks, TeamTurnovers, TeamPersonalFouls)
+
+cormatrix <- rcorr(as.matrix(simple_clean_logs))
+
+cormatrix$r
+```
+
+```{r}
+logs |>  filter(TeamFull == "Maryland Terrapins" & Season == '2022-2023' ) |> 
+  summarise(
+    avg_steals = mean(TeamSteals),
+    avg_blocks = mean(TeamBlocks),
+    avg_fouls = mean(TeamPersonalFouls),
+    avg_turnovers = mean(TeamTurnovers)
+  )
+```
+
+```{r}
+(5.457143 * 1.59730) + (3.742857 * 1.66410) + (16 * -.80009) + (10.14286 * -.48506)
+```
+
+```{r}
+logs |> filter(
+         Team == "Maryland" & Season == '2022-2023'
+     ) |> summarise(avg_score = mean(TeamScore), avg_opp = mean(OpponentScore))
+```
+
+This model seemed valuable in principle, but these factors surprisingly aren't closely correlated with point differential. A team's steals, blocks, turnovers, and personal fouls amass an adjusted r-squared value of less than 20, meaning the model isn't useless per se, but it isn't very effective in explaining point differential. Based on these four factors, the model predicted that Maryland's average point differential would be about -2.78, when, in reality, the Terps outscored their opponents by about six points last year. 
+
+I'm not sure if there's anything I could do to improve a model based on these four factors, other than including statistics from the opposing team. Instead of a team's turnovers or personal fouls, looking at the opposing team's turnovers or fouls could yield a more effective model (though I doubt it would).
