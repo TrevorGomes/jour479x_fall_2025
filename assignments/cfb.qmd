@@ -1,0 +1,41 @@
+```{r}
+
+library(tidyverse)
+library(Hmisc)
+
+logs <- read_csv("https://dwillis.github.io/sports-data-files/footballlogs1124.csv")
+```
+
+```{r}
+logs <- logs |> mutate(
+  differential = TeamScore - OpponentScore
+)
+
+logs |> summarise(correlation = cor(differential, Penalties, method = "pearson"))
+
+penalties_model <- lm(differential ~ Penalties, data = logs)
+summary(penalties_model)
+
+```
+
+The p-value yielded by this model is .004, below the .05 threshold and therefore statistically significant, meaning the results are not due to random chance. However, the adjusted R-squared value is very low. According to this model, the number of penalties in a game accounts for roughly .03 percent of a team's point differential. This model is not ver useful overall because penalties account for such a small percentage of point differential.
+
+```{r}
+penalties_andmore_model <- lm(differential ~ Penalties + TotalTurnovers + DefPassingPct + DefRushingAvg, data = logs)
+summary(penalties_andmore_model)
+```
+
+I chose to add turnovers, completion percentage allowed, and rushing yards per carry allowed because they do not overlap with penalties, therefore avoiding multicollinearity. Completion percentage allowed and yards per carry allowed also seem like accurate predictors for how effective a defense is. Turnovers are also a coach's favorite explanation for why their team won or lost, so I wanted to evaluate truly how responsible they are for a team's point differential. 
+
+An adjusted R-squared value of .46 is decently high, showing that these four factors account for nearly 50 percent of a given game's point differential. There are likely a different collection of four variables that could account for a higher percentage of differential, but these four are clearly significant toward the differential. The p-value is far below .05, showing that the results are also statistically significant. 
+
+```{r}
+logs_filtered <- logs |> filter(
+  differential < 10, differential > -10
+)
+
+penalties_andmore_model <- lm(differential ~ Penalties + TotalTurnovers + DefPassingPct + DefRushingAvg, data = logs_filtered)
+summary(penalties_andmore_model)
+```
+
+After narrowing the data to games with a single-digit differential, my model's residual standard error unsurprisingly went down, but the adjusted R-squared value also decrease considerably. Overall, the model is more accurate by residual standard error, but it represents four variables that don't account for much of the point differential. This model likely wouldn't lead to a story itself, but it could still be useful for context in a larger story about the determining factors of which teams win one-score games. Turnovers, penalties, and defensive efficiency don't seem to be the most accurate predictors of success in one-possession games.
