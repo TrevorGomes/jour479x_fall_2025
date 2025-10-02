@@ -219,3 +219,32 @@ The outcomes of Maryland women's soccer games have been closely tied to the numb
 Maryland's matches against Saint Francis and Florida are particularly telling. The Gators earned six more corners than Maryland in a decisive win over the Terps. In a 5-0 shellacking of Saint Francis, Maryland recorded six more corners than the Red Flash.
 
 This is supported by a moderately positive correlation between the number of corners a team earns and allows, and the number of goals that team scores and concedes.
+
+## Residuals
+
+```{r}
+diff_model <- lm(differential ~ so_g + defensive_so_g + fouls + defensive_fouls, data = new_correlations_2025)
+summary(diff_model)
+```
+
+I chose shots on goal, defensive shots on goal, fouls, and defensive fouls because I feel these are accurate indicators of how effective a team's offense and defense was in a match. Shots on goal and defensive shots on goal especially represent the effectiveness of a team on both sides of the ball, because they directly indicate how many scoring opportunities a team earned and conceded. The number of fouls a team commits shows how "clean" the team's defense is, while defensive fouls shows how disciplined the opposing team's defense is.
+
+The maximum (6.9841) and minimum residual (-7.0618) values are quite large, but the median residual value of -.0032 is fairly close to zero. This indicates that the model is generally accurate in predicting most games. The adjusted R-squared value of .5749 is considerable, but not extremely high.
+
+```{r}
+new_correlations_2025 <- new_correlations_2025 |> mutate(predicted = predict(diff_model), residuals = residuals(diff_model))
+
+new_correlations_2025 |> top_n(10, wt=residuals) |> arrange(desc(residuals))
+```
+
+```{r}
+new_correlations_2025 |> filter(residuals < 0) |> top_n(-10, wt=residuals) |> arrange(residuals)
+```
+
+A detail about these games that I immediately notice is the number of non-Power Five teams involved. There are only a handful of power conference teams in the top and bottom- 10residuals games. Most of the top-10 residuals games see the winning teams attempt double-digit shots on goal, though, even with that, the model is predicting that those teams would win by a far smaller margin than they actually did. This would likely suggest that these teams are converting their shots on goal at a much higher rate than average.
+
+```{r}
+new_correlations_2025 |> filter(team == "Maryland Terrapins, Terps") |> arrange(desc(residuals))
+```
+
+Maryland's biggest underperformances came when they allowed single-digit shots on goal, but still lost by a significant margin. In both the Penn State and USC games, Maryland allowed a relatively low number of shots on goal proportionate to the total shot attempts they surrendered. This may suggest that when the opposing teams did manage shots on goal, they were open looks or accurate shots, because they converted them at a high rate. Maryland also only notched one shot on goal in each of these games. The Terps' biggest overperformances came in their wins over Indiana and Purdue. In these games, Maryland committed only slightly fewer fouls than the opposing team and were outshot or tied in shots on goal. I was surprised at the fact that shots on goal and opposing shots on goal didn't account for a higher percentage of goal differential. This leads me to my story idea. The angle I'd suggest, both for Maryland and in general, is that shots on goal is not the most important stat. Rather, the type of shots on goal, considering accuracy, power, and goalkeeper reaction, is likely more telling.

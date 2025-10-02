@@ -121,3 +121,23 @@ logs |> filter(
 This model seemed valuable in principle, but these factors surprisingly aren't closely correlated with point differential. A team's steals, blocks, turnovers, and personal fouls amass an adjusted r-squared value of less than 20, meaning the model isn't useless per se, but it isn't very effective in explaining point differential. Based on these four factors, the model predicted that Maryland's average point differential would be about -2.78, when, in reality, the Terps outscored their opponents by about six points last year. 
 
 I'm not sure if there's anything I could do to improve a model based on these four factors, other than including statistics from the opposing team. Instead of a team's turnovers or personal fouls, looking at the opposing team's turnovers or fouls could yield a more effective model (though I doubt it would).
+
+### Residuals
+
+```{r}
+residualmodel <- logs |> mutate(differential = TeamScore - OpponentScore, FGPctMargin = TeamFGPCT - OpponentFGPCT)
+```
+
+```{r}
+fit <- lm(differential ~ FGPctMargin, data = residualmodel)
+summary(fit)
+```
+
+```{r}
+residualmodel <- residualmodel |> filter(!is.na(FGPctMargin))
+
+residualmodel <- residualmodel |> mutate(predicted = predict(fit), residuals = residuals(fit))
+
+residualmodel |> filter(Team == 'Maryland') |> arrange(desc(residuals)) |> select(Date, Team, Opponent, W_L, differential, FGPctMargin, predicted, residuals)
+```
+
