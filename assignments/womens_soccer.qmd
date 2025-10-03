@@ -248,3 +248,32 @@ new_correlations_2025 |> filter(team == "Maryland Terrapins, Terps") |> arrange(
 ```
 
 Maryland's biggest underperformances came when they allowed single-digit shots on goal, but still lost by a significant margin. In both the Penn State and USC games, Maryland allowed a relatively low number of shots on goal proportionate to the total shot attempts they surrendered. This may suggest that when the opposing teams did manage shots on goal, they were open looks or accurate shots, because they converted them at a high rate. Maryland also only notched one shot on goal in each of these games. The Terps' biggest overperformances came in their wins over Indiana and Purdue. In these games, Maryland committed only slightly fewer fouls than the opposing team and were outshot or tied in shots on goal. I was surprised at the fact that shots on goal and opposing shots on goal didn't account for a higher percentage of goal differential. This leads me to my story idea. The angle I'd suggest, both for Maryland and in general, is that shots on goal is not the most important stat. Rather, the type of shots on goal, considering accuracy, power, and goalkeeper reaction, is likely more telling.
+
+## Z-Scores
+
+```{r}
+teamquality <- matches_2025 |> 
+  mutate(sog_pct = so_g/sh_att, def_sog_pct = defensive_so_g/defensive_sh_att) |> 
+  filter(!is.na(sog_pct), !is.na(def_sog_pct)) |> 
+  group_by(team) |> 
+  summarise(
+    avg_goals = mean(goals),
+    avg_def_goals = mean(defensive_goals),
+    avg_sog_pct = mean(sog_pct),
+    avg_def_sog_pct = mean(def_sog_pct),
+    avg_assists = mean(assists),
+    avg_def_assists = mean(defensive_assists)
+  )
+
+ teamzscore <- teamquality |> 
+  mutate(
+    goalsZscore = as.numeric(scale(avg_goals, center = TRUE, scale = TRUE)),
+    defgoalsZscore = as.numeric(scale(avg_def_goals, center = TRUE, scale = TRUE)) * -1,
+    sogpctZscore = as.numeric(scale(avg_sog_pct, center = TRUE, scale = TRUE)),
+    defsogpctZscore = as.numeric(scale(avg_def_sog_pct, center = TRUE, scale = TRUE)) * -1,
+    assistsZscore = as.numeric(scale(avg_assists, center = TRUE, scale = TRUE)),
+    defassistsZscore = as.numeric(scale(avg_def_assists, center = TRUE, scale = TRUE)) * -1,
+    TotalZscore = goalsZscore + defgoalsZscore + sogpctZscore + defsogpctZscore + assistsZscore + defassistsZscore
+  ) 
+```
+

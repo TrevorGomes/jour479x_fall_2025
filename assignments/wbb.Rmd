@@ -1,0 +1,58 @@
+```{r}
+library(tidyverse)
+
+wbb_team_stats <- read_csv("https://dwillis.github.io/sports-data-files/wbbstats1525.csv")
+```
+
+```{r}
+wbb_categories <- wbb_team_stats |>  select(
+  Season, School, Games, ForPoints, FieldGoalsMade, ThreePointMade, TotalRebounds, Steals, Blocks
+)
+```
+
+I chose these categories because I feel like points per game, field goals made, and three pointers made are all solid measures of offense, regardless of playstyle. If teams don't shoot a lot of threes but are still effective, points per game and field goals made capture that.
+
+Rebounds, steals, and blocks per game are solid indicators of how effective a defense is at forcing turnovers and ending the opposing teams' possessions. I would have included opponent field goal percentage and opponent turnovers, if the dataset included them, however.
+
+```{r}
+wbb_avgs <- wbb_categories |> group_by(
+  Season, School
+) |> summarise(
+  points_avg = ForPoints/Games,
+  fg_made_avg = FieldGoalsMade/Games,
+  three_point_made_avg = ThreePointMade/Games,
+  total_rebound_avg = TotalRebounds/Games,
+  steals_avg = Steals/Games,
+  blocks_avg = Blocks/Games,
+)
+
+```
+
+```{r}
+wbb_z_scores <- wbb_avgs |> 
+  mutate(
+    PointsZscore = as.numeric(scale(points_avg, center = TRUE, scale = TRUE)),
+    FGMadeZscore = as.numeric(scale(fg_made_avg, center = TRUE, scale = TRUE)),
+    ThreePointZscore = as.numeric(scale(three_point_made_avg, center = TRUE, scale = TRUE)),
+    ReboundZscore = as.numeric(scale(total_rebound_avg, center = TRUE, scale = TRUE)),
+    StealsZscore = as.numeric(scale(steals_avg, center = TRUE, scale = TRUE)),
+    BlocksZscore = as.numeric(scale(blocks_avg, center = TRUE, scale = TRUE)),
+    TotalZscore = PointsZscore + FGMadeZscore + ThreePointZscore + ReboundZscore + StealsZscore + BlocksZscore
+  )  
+```
+
+Unsurprisingly, there are several UConn teams in the top 10 by total Z score. The 2015 UConn squad that went 38-1 and won the national championship tops the list. A few Dawn Staley South Carolina teams also make the cut.
+
+2017 Maryland, which went 32-3 and made the Sweet Sixteen, slots in at seventh by total Z score. 
+
+```{r}
+wbb_z_scores |> filter(
+  School == "Maryland"
+) |> arrange(desc(TotalZscore))
+```
+
+By this composite Z score, 2017 Maryland is the best Maryland women's basketball team in the last decade by a considerable margin. The 2017 team has a TotalZscore of 13.24, while the second-highest (2020) sits at 11.45. The 2016 and 2021 teams round out the top four, and are the only four teams with a double-digit TotalZscore. The seven other teams have markedly lower TotalZscores.
+
+I think the most engaging, and perhaps most obvious, story idea here is that, during the last decade, as defined by this composite Z score, South Carolina has rivaled UConn in terms of producing elite teams. Three UConn teams make the top 10 of TotalZscore, but South Carolina has two, and a third team with the 11th-highest TotalZscore. This data could serve as statistical evidence for a larger piece comparing the two programs' dominance in recent years.
+
+Another story is 2016 Sacramento State, who, according to this composite Z score, look like a powerhouse. The Hornets' PointsZscore, ThreePointZscore, and StealsZscore are all extremely high, contributing to them having the second-highest TotalZscore in the entirety of the past decade. This team finished second in the nation in scoring at 87.5 points per game that season as well. Despite all this, Sacramento State finished the 2015-16 season 14-17. The Hornets allowed 85.8 points per game that season, which ranked 349th of 349 teams. I'd love to see an in-depth analysis of what Sacramento State's system was this year and why it failed.
