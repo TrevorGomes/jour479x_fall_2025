@@ -56,3 +56,13 @@ By this composite Z score, 2017 Maryland is the best Maryland women's basketball
 I think the most engaging, and perhaps most obvious, story idea here is that, during the last decade, as defined by this composite Z score, South Carolina has rivaled UConn in terms of producing elite teams. Three UConn teams make the top 10 of TotalZscore, but South Carolina has two, and a third team with the 11th-highest TotalZscore. This data could serve as statistical evidence for a larger piece comparing the two programs' dominance in recent years.
 
 Another story is 2016 Sacramento State, who, according to this composite Z score, look like a powerhouse. The Hornets' PointsZscore, ThreePointZscore, and StealsZscore are all extremely high, contributing to them having the second-highest TotalZscore in the entirety of the past decade. This team finished second in the nation in scoring at 87.5 points per game that season as well. Despite all this, Sacramento State finished the 2015-16 season 14-17. The Hornets allowed 85.8 points per game that season, which ranked 349th of 349 teams. I'd love to see an in-depth analysis of what Sacramento State's system was this year and why it failed.
+
+## Writeup
+
+Sacramento State women's basketball held a losing record in a non-Power Five conference for much of the 2010s, making them a more obscure program in the sport. Offensively, though, the Hornets were as prolific as any other team during that time.
+
+Coach Bunky Harkleroad's system was predicated on a high volume of three-pointers and generating steals. In the 2015-16 season, Sacramento State averaged over 12 threes made per game, along with nearly 15 steals per game.
+
+These figures rank above even the sport's most elite teams, like Geno Auriemma's UConn squads and Dawn Staley's South Carolina teams.
+
+This system wasn't conducive to winning, however. Hornets averaged 87.5 points per game in 2015-16 - the second-most in the nation - but allowed 85.5 points a contest. They ranked 349th of 349 teams in points allowed per game.
