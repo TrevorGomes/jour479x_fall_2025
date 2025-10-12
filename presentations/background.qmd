@@ -1,0 +1,25 @@
+My question: How has the center position changed in the NBA since 2000?
+
+Does that data already exist? Can you get it?
+
+The data that I'd use for the purpose of this project (field goal percentage, three point attempts per game, three point percentage, assists per game, usage rate, and any other relatively basic stat I'd want to use) are accessible via Basketball Reference. I can find the stats form every player in a given season in the "Seasons" section, then the "Player Stats" subsection (https://www.basketball-reference.com/leagues/NBA_2025_per_game.html). When I try to copy and paste the link into a Google Sheets spreadsheet, though, I get an error saying "Resource at URL contents exceeded maximum size," which I believe has to do with the file size, rather than the number of rows, columns, or cells. There may be a way to minimize the data, but I cannot find out how.
+
+The average height of centers since 2000 is a bit harder to find. The only source I could locate that displays player heights in a table format is on nba.com (https://www.nba.com/stats/players/bio?Season=2024-25&SeasonType=Regular+Season), and even then, I'm not sure if you can convert that data into a CSV or a format that can be imported into a spreadsheet.
+
+Do you need assistance in getting it?
+
+I could use assistance with more efficiently gathering the data from Basketball Reference. I'm not sure how to minimize the data (maybe I could filter it to only include centers? Though I'm not sure what the best way to do this would be). I could also use help determining if there's a better way to include data since 2000 than loading every season's data individually. Using over 20 individual datasets would be difficult. 
+
+Also, I could use help determining how to export the nba.com data as a more usable format.
+
+What time frame do you want/need data from?
+
+I would need data from every NBA season since 2000. The center position in the NBA has undergone significant change this century, so the data since 2000 would accurately display that. 
+
+Will you have to improve or augment the data in order to answer your question? If so, how?
+
+I'll have to filter my data to only include centers and select the data that I want to use, but apart from that, I don't believe I'd have to change my data in any way.
+
+Are there other examples of this kind of work (specific or general)? If so, provide them.
+
+This story (http://basketballpoetry.com/p/how-have-nba-positions-changed) has a somewhat similar angle to the one I'm imagining for my project. It also uses data visualizations to analyze how posistions have changed over time, and specifically looks at rebounds and assists per 75 possessions by position, just as I will do with centers.
