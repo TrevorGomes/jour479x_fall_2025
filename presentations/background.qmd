@@ -23,3 +23,30 @@ I'll have to filter my data to only include centers and select the data that I w
 Are there other examples of this kind of work (specific or general)? If so, provide them.
 
 This story (http://basketballpoetry.com/p/how-have-nba-positions-changed) has a somewhat similar angle to the one I'm imagining for my project. It also uses data visualizations to analyze how posistions have changed over time, and specifically looks at rebounds and assists per 75 possessions by position, just as I will do with centers.
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+nbalogs_2025 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/2025nbadata.csv")
+```
+
+```{r}
+centerlogs_2025 <- nbalogs_2025 |> filter(Pos =="C")
+```
+
+This dataset only contains statistics from the 2024-25 NBA season, though it contains entries from 103 centers. For the purpose of my project (analyzing how the playstyle of NBA centers has changed since 2000), I'll take the average number of assists per game, three point attempts, three point percentage, and rebounds per game.
+
+```{r}
+centeraverages_2025 <- centerlogs_2025 |> rename("ThreePointAtt" = `3PA`) |> rename("ThreePointPct" = `3P%`) |> na.omit(centerlogs_2025) |>  summarise(
+  AverageAssists = mean(AST),
+  AverageRebounds = mean(TRB),
+  Average3PTATT = mean(ThreePointAtt),
+  Average3PTPCT = mean(ThreePointPct * 100)
+)
+```
+
+My next step would be to load every dataset since 2000, which would be tedious but doable. Then, I could create a line chart showing the change in the four metrics that I measured. The method of calculating the average of all four statistics is fairly simple, which makes my question easier to answer.
+
+The average height of centers - and the analysis of the "small ball" lineups that were prevalent throughout the NBA in the 2010s - would be a bit more difficult though. I would have to link that data to my data imported from Basketball Reference.
