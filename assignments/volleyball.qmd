@@ -177,3 +177,65 @@ The scatterplot would suggest that defensive hitting percentage is not the most 
 4. From a strategic perspective, what questions would you want to explore next based on these findings? What additional data might help explain the patterns you're seeing?
 
 A question that immediately sprang to mind is which teams most closely align with these results and which had the highest number of outliers (whether that meant allowing a higher or lower hitting percentage). These results also call into question how valuable defensive hitting percentage is as a stat, and may suggest that other statistics are more accurate predictors of a team's defensive prowess. I'd like to conduct analyses on the hitting percentage and defensive hitting percentage of Power Five or Big Ten schools to determine if non-conference games or non-Power Five schools are behind these findings. For strategy's sake, I'd also like to explore if there are better statistics for coaches to use in preparation for their next opponent. Errors and defensive errors, or kills and kills allowed would be my first options for determining how effective a team's offense or defense is.
+
+## Dumbbell and Lollipop Charts
+
+```{r}
+library(tidyverse)
+library(ggalt)
+```
+
+```{r}
+logs <- read.csv("https://dwillis.github.io/sports-data-files/ncaa_womens_volleyball_matchstats_2024.csv")
+```
+
+```{r}
+big10 <- c("Nebraska", "Iowa", "Minnesota", "Illinois", "Northwestern", "Wisconsin", "Indiana", "Purdue", "Ohio St.", "Michigan", "Michigan St.", "Penn St.", "Rutgers", "Maryland", "Southern California", "UCLA", "Washington", "Oregon")
+
+errors <- logs |>
+  filter(team %in% big10) |> 
+  group_by(team) |> 
+  summarise(
+    total_errors = sum(errors), 
+    opp_errors = sum(defensive_errors))
+```
+
+```{r}
+ggplot() + 
+  geom_dumbbell(
+    data=errors, 
+    aes(y=team, x=total_errors, xend=opp_errors)
+  )
+```
+
+```{r}
+ggplot() + 
+  geom_dumbbell(
+    data=errors, 
+    aes(y=team, x=opp_errors, xend=total_errors),
+    colour = "grey",
+    colour_x = "green",
+    colour_xend = "red")
+```
+
+```{r}
+ggplot() + 
+  geom_dumbbell(
+    data=errors, 
+    aes(y=team, x=opp_errors, xend=total_errors),
+    linewidth = 1,
+    color = "grey",
+    colour_x = "green",
+    colour_xend = "red") + 
+  theme_minimal()
+```
+
+```{r}
+ggplot() + 
+  geom_lollipop(
+    data=errors, 
+    aes(y=team, x=opp_errors), 
+    horizontal = TRUE
+    )
+```
+
