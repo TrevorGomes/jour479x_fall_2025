@@ -29,22 +29,24 @@ library(tidyverse)
 ```
 
 ```{r}
-nbalogs_2025 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/2025nbadata.csv")
+nbalogs_2024 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/2025nbadata.csv")
 ```
 
 ```{r}
-centerlogs_2025 <- nbalogs_2025 |> filter(Pos =="C")
+centerlogs_2024 <- nbalogs_2024 |> filter(Pos =="C")
 ```
 
 This dataset only contains statistics from the 2024-25 NBA season, though it contains entries from 103 centers. For the purpose of my project (analyzing how the playstyle of NBA centers has changed since 2000), I'll take the average number of assists per game, three point attempts, three point percentage, and rebounds per game.
 
 ```{r}
-centeraverages_2025 <- centerlogs_2025 |> rename("ThreePointAtt" = `3PA`) |> rename("ThreePointPct" = `3P%`) |> na.omit(centerlogs_2025) |>  summarise(
+centeraverages_2024 <- centerlogs_2024 |> rename("ThreePointAtt" = `3PA`) |> rename("ThreePointPct" = `3P%`) |> na.omit(centerlogs_2024) |>  summarise(
   AverageAssists = mean(AST),
   AverageRebounds = mean(TRB),
   Average3PTATT = mean(ThreePointAtt),
-  Average3PTPCT = mean(ThreePointPct * 100)
+  Average3PTPCT = mean(ThreePointPct * 100),
 )
+
+centeraverages_2024 <- centeraverages_2024 |> mutate(Year = "2024-25")
 ```
 
 My next step would be to load every dataset since 2000, which would be tedious but doable. Then, I could create a line chart showing the change in the four metrics that I measured. The method of calculating the average of all four statistics is fairly simple, which makes my question easier to answer.
@@ -52,17 +54,331 @@ My next step would be to load every dataset since 2000, which would be tedious b
 The average height of centers - and the analysis of the "small ball" lineups that were prevalent throughout the NBA in the 2010s - would be a bit more difficult though. I would have to link that data to my data imported from Basketball Reference.
 
 ```{r}
-nbalogs_2001 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/2000-01nbadata.csv")
+nbalogs_2000 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/2000-01nbadata.csv")
 
-centerlogs_2001 <- nbalogs_2001 |> filter(Pos=="C")
+centerlogs_2000 <- nbalogs_2000 |> filter(Pos=="C")
 ```
 
 ```{r}
-centeraverages_2001 <- centerlogs_2001|> rename("ThreePointAtt" = `3PA`) |> rename("ThreePointPct" = `3P%`) |> na.omit(centerlogs_2025) |>  summarise(
+centeraverages_2000 <- centerlogs_2000|> rename("ThreePointAtt" = `3PA`) |> rename("ThreePointPct" = `3P%`) |> na.omit(centerlogs_2000) |>  summarise(
   AverageAssists = mean(AST),
   AverageRebounds = mean(TRB),
   Average3PTATT = mean(ThreePointAtt),
   Average3PTPCT = mean(ThreePointPct * 100)
 )
+
+centeraverages_2000 <-  centeraverages_2000 |> mutate(Year = "2000-01")
+```
+
+```{r}
+nbalogs_2001 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/2001-02nbadata.csv")
+centerlogs_2001 <- nbalogs_2001 |> filter(Pos=="C")
+centeraverages_2001 <- centerlogs_2001|> rename("ThreePointAtt" = `3PA`) |> rename("ThreePointPct" = `3P%`) |> na.omit(centerlogs_2001) |>  summarise(
+  AverageAssists = mean(AST),
+  AverageRebounds = mean(TRB),
+  Average3PTATT = mean(ThreePointAtt),
+  Average3PTPCT = mean(ThreePointPct * 100)
+)
+
+centeraverages_2001 <-  centeraverages_2001 |> mutate(Year = "2001-02")
+```
+
+```{r}
+nbalogs_2002 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/2002-03nbadata.csv")
+
+centerlogs_2002 <- nbalogs_2002 |> filter(Pos=="C")
+centeraverages_2002 <- centerlogs_2002|> rename("ThreePointAtt" = `3PA`) |> rename("ThreePointPct" = `3P%`) |> na.omit(centerlogs_2002) |>  summarise(
+  AverageAssists = mean(AST),
+  AverageRebounds = mean(TRB),
+  Average3PTATT = mean(ThreePointAtt),
+  Average3PTPCT = mean(ThreePointPct * 100)
+)
+
+centeraverages_2002 <- centeraverages_2002 |> mutate(Year = "2002-03")
+```
+
+```{r}
+nbalogs_2003 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/2003-04nbadata.csv")
+
+centerlogs_2003 <- nbalogs_2003 |> filter(Pos=="C")
+centeraverages_2003 <- centerlogs_2003|> rename("ThreePointAtt" = `3PA`) |> rename("ThreePointPct" = `3P%`) |> na.omit(centerlogs_2003) |>  summarise(
+  AverageAssists = mean(AST),
+  AverageRebounds = mean(TRB),
+  Average3PTATT = mean(ThreePointAtt),
+  Average3PTPCT = mean(ThreePointPct * 100))
+
+centeraverages_2003 <- centeraverages_2003 |> mutate(Year = "2003-04")
+```
+
+```{r}
+nbalogs_2004 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/2004-05nbadata.csv")
+
+centerlogs_2004 <- nbalogs_2004 |> filter(Pos=="C")
+centeraverages_2004 <- centerlogs_2004|> rename("ThreePointAtt" = `3PA`) |> rename("ThreePointPct" = `3P%`) |> na.omit(centerlogs_2004) |>  summarise(
+  AverageAssists = mean(AST),
+  AverageRebounds = mean(TRB),
+  Average3PTATT = mean(ThreePointAtt),
+  Average3PTPCT = mean(ThreePointPct * 100))
+
+centeraverages_2004 <- centeraverages_2004 |> mutate(Year = "2004-05")
+```
+
+```{r}
+nbalogs_2005 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/2005-06nbadata.csv")
+
+centerlogs_2005 <- nbalogs_2005 |> filter(Pos=="C")
+centeraverages_2005 <- centerlogs_2005|> rename("ThreePointAtt" = `3PA`) |> rename("ThreePointPct" = `3P%`) |> na.omit(centerlogs_2005) |>  summarise(
+  AverageAssists = mean(AST),
+  AverageRebounds = mean(TRB),
+  Average3PTATT = mean(ThreePointAtt),
+  Average3PTPCT = mean(ThreePointPct * 100))
+
+centeraverages_2005 <- centeraverages_2005 |> mutate(Year = "2005-06")
+```
+
+```{r}
+nbalogs_2006 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/2006-07nbadata.csv")
+
+centerlogs_2006 <- nbalogs_2006 |> filter(Pos=="C")
+centeraverages_2006 <- centerlogs_2006|> rename("ThreePointAtt" = `3PA`) |> rename("ThreePointPct" = `3P%`) |> na.omit(centerlogs_2006) |>  summarise(
+  AverageAssists = mean(AST),
+  AverageRebounds = mean(TRB),
+  Average3PTATT = mean(ThreePointAtt),
+  Average3PTPCT = mean(ThreePointPct * 100))
+
+centeraverages_2006 <- centeraverages_2006 |> mutate(Year = "2006-07")
+```
+
+```{r}
+nbalogs_2007 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/2007-08nbadata.csv")
+
+centerlogs_2007 <- nbalogs_2007 |> filter(Pos=="C")
+centeraverages_2007 <- centerlogs_2007|> rename("ThreePointAtt" = `3PA`) |> rename("ThreePointPct" = `3P%`) |> na.omit(centerlogs_2007) |>  summarise(
+  AverageAssists = mean(AST),
+  AverageRebounds = mean(TRB),
+  Average3PTATT = mean(ThreePointAtt),
+  Average3PTPCT = mean(ThreePointPct * 100))
+
+centeraverages_2007 <- centeraverages_2007 |> mutate(Year = "2007-08")
+```
+
+```{r}
+nbalogs_2008 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/2008-09nbadata.csv")
+
+centerlogs_2008 <- nbalogs_2008 |> filter(Pos=="C")
+centeraverages_2008 <- centerlogs_2008|> rename("ThreePointAtt" = `3PA`) |> rename("ThreePointPct" = `3P%`) |> na.omit(centerlogs_2008) |>  summarise(
+  AverageAssists = mean(AST),
+  AverageRebounds = mean(TRB),
+  Average3PTATT = mean(ThreePointAtt),
+  Average3PTPCT = mean(ThreePointPct * 100))
+
+centeraverages_2008 <- centeraverages_2008 |> mutate(Year = "2008-09")
+```
+
+```{r}
+nbalogs_2009 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/2009-10nbadata.csv")
+
+centerlogs_2009 <- nbalogs_2009 |> filter(Pos=="C")
+centeraverages_2009 <- centerlogs_2009|> rename("ThreePointAtt" = `3PA`) |> rename("ThreePointPct" = `3P%`) |> na.omit(centerlogs_2009) |>  summarise(
+  AverageAssists = mean(AST),
+  AverageRebounds = mean(TRB),
+  Average3PTATT = mean(ThreePointAtt),
+  Average3PTPCT = mean(ThreePointPct * 100))
+
+centeraverages_2009 <- centeraverages_2009 |> mutate(Year = "2009-10")
+```
+
+```{r}
+nbalogs_2010 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/2010-11nbadata.csv")
+
+centerlogs_2010 <- nbalogs_2010 |> filter(Pos=="C")
+centeraverages_2010 <- centerlogs_2010|> rename("ThreePointAtt" = `3PA`) |> rename("ThreePointPct" = `3P%`) |> na.omit(centerlogs_2010) |>  summarise(
+  AverageAssists = mean(AST),
+  AverageRebounds = mean(TRB),
+  Average3PTATT = mean(ThreePointAtt),
+  Average3PTPCT = mean(ThreePointPct * 100))
+
+centeraverages_2010 <- centeraverages_2010 |> mutate(Year = "2010-11")
+```
+
+```{r}
+nbalogs_2011 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/2011-12nbadata.csv")
+
+centerlogs_2011 <- nbalogs_2011 |> filter(Pos=="C")
+centeraverages_2011 <- centerlogs_2011|> rename("ThreePointAtt" = `3PA`) |> rename("ThreePointPct" = `3P%`) |> na.omit(centerlogs_2011) |>  summarise(
+  AverageAssists = mean(AST),
+  AverageRebounds = mean(TRB),
+  Average3PTATT = mean(ThreePointAtt),
+  Average3PTPCT = mean(ThreePointPct * 100))
+
+centeraverages_2011 <- centeraverages_2011 |> mutate(Year = "2011-12")
+```
+
+```{r}
+nbalogs_2012 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/2012-13nbadata.csv")
+
+centerlogs_2012 <- nbalogs_2012 |> filter(Pos=="C")
+centeraverages_2012 <- centerlogs_2012|> rename("ThreePointAtt" = `3PA`) |> rename("ThreePointPct" = `3P%`) |> na.omit(centerlogs_2012) |>  summarise(
+  AverageAssists = mean(AST),
+  AverageRebounds = mean(TRB),
+  Average3PTATT = mean(ThreePointAtt),
+  Average3PTPCT = mean(ThreePointPct * 100))
+
+centeraverages_2012 <- centeraverages_2012 |> mutate(Year = "2012-13")
+```
+
+```{r}
+nbalogs_2013 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/2013-14nbadata.csv")
+
+centerlogs_2013 <- nbalogs_2013 |> filter(Pos=="C")
+centeraverages_2013 <- centerlogs_2013|> rename("ThreePointAtt" = `3PA`) |> rename("ThreePointPct" = `3P%`) |> na.omit(centerlogs_2013) |>  summarise(
+  AverageAssists = mean(AST),
+  AverageRebounds = mean(TRB),
+  Average3PTATT = mean(ThreePointAtt),
+  Average3PTPCT = mean(ThreePointPct * 100))
+
+centeraverages_2013 <- centeraverages_2013 |> mutate(Year = "2013-14")
+```
+
+```{r}
+nbalogs_2014 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/2014-15nbadata.csv")
+
+centerlogs_2014 <- nbalogs_2014 |> filter(Pos=="C")
+centeraverages_2014 <- centerlogs_2014|> rename("ThreePointAtt" = `3PA`) |> rename("ThreePointPct" = `3P%`) |> na.omit(centerlogs_2014) |>  summarise(
+  AverageAssists = mean(AST),
+  AverageRebounds = mean(TRB),
+  Average3PTATT = mean(ThreePointAtt),
+  Average3PTPCT = mean(ThreePointPct * 100))
+
+centeraverages_2014 <- centeraverages_2014 |> mutate(Year = "2014-15")
+```
+
+```{r}
+nbalogs_2015 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/2015-16nbadata.csv")
+
+centerlogs_2015 <- nbalogs_2015 |> filter(Pos=="C")
+centeraverages_2015 <- centerlogs_2015|> rename("ThreePointAtt" = `3PA`) |> rename("ThreePointPct" = `3P%`) |> na.omit(centerlogs_2015) |>  summarise(
+  AverageAssists = mean(AST),
+  AverageRebounds = mean(TRB),
+  Average3PTATT = mean(ThreePointAtt),
+  Average3PTPCT = mean(ThreePointPct * 100))
+
+centeraverages_2015 <- centeraverages_2015 |> mutate(Year = "2015-16")
+```
+
+```{r}
+nbalogs_2016 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/2016-17nbadata.csv")
+
+centerlogs_2016 <- nbalogs_2016 |> filter(Pos=="C")
+centeraverages_2016 <- centerlogs_2016|> rename("ThreePointAtt" = `3PA`) |> rename("ThreePointPct" = `3P%`) |> na.omit(centerlogs_2016) |>  summarise(
+  AverageAssists = mean(AST),
+  AverageRebounds = mean(TRB),
+  Average3PTATT = mean(ThreePointAtt),
+  Average3PTPCT = mean(ThreePointPct * 100))
+
+centeraverages_2016 <- centeraverages_2016 |> mutate(Year = "2016-17")
+```
+
+```{r}
+nbalogs_2017 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/2017-18nbadata.csv")
+
+centerlogs_2017 <- nbalogs_2017 |> filter(Pos=="C")
+centeraverages_2017 <- centerlogs_2017|> rename("ThreePointAtt" = `3PA`) |> rename("ThreePointPct" = `3P%`) |> na.omit(centerlogs_2017) |>  summarise(
+  AverageAssists = mean(AST),
+  AverageRebounds = mean(TRB),
+  Average3PTATT = mean(ThreePointAtt),
+  Average3PTPCT = mean(ThreePointPct * 100))
+
+centeraverages_2017 <- centeraverages_2017 |> mutate(Year = "2017-18")
+```
+
+```{r}
+nbalogs_2018 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/2018-19nbadata.csv")
+
+centerlogs_2018 <- nbalogs_2018 |> filter(Pos=="C")
+centeraverages_2018 <- centerlogs_2018|> rename("ThreePointAtt" = `3PA`) |> rename("ThreePointPct" = `3P%`) |> na.omit(centerlogs_2018) |>  summarise(
+  AverageAssists = mean(AST),
+  AverageRebounds = mean(TRB),
+  Average3PTATT = mean(ThreePointAtt),
+  Average3PTPCT = mean(ThreePointPct * 100))
+
+centeraverages_2018 <- centeraverages_2018 |> mutate(Year = "2018-19")
+```
+
+```{r}
+nbalogs_2019 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/2019-20nbadata.csv")
+
+centerlogs_2019 <- nbalogs_2019 |> filter(Pos=="C")
+centeraverages_2019 <- centerlogs_2019|> rename("ThreePointAtt" = `3PA`) |> rename("ThreePointPct" = `3P%`) |> na.omit(centerlogs_2019) |>  summarise(
+  AverageAssists = mean(AST),
+  AverageRebounds = mean(TRB),
+  Average3PTATT = mean(ThreePointAtt),
+  Average3PTPCT = mean(ThreePointPct * 100))
+
+centeraverages_2019 <- centeraverages_2019 |> mutate(Year = "2019-20")
+```
+
+```{r}
+nbalogs_2020 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/2020-21nbadata.csv")
+
+centerlogs_2020 <- nbalogs_2020 |> filter(Pos=="C")
+centeraverages_2020 <- centerlogs_2020|> rename("ThreePointAtt" = `3PA`) |> rename("ThreePointPct" = `3P%`) |> na.omit(centerlogs_2020) |>  summarise(
+  AverageAssists = mean(AST),
+  AverageRebounds = mean(TRB),
+  Average3PTATT = mean(ThreePointAtt),
+  Average3PTPCT = mean(ThreePointPct * 100))
+
+centeraverages_2020 <- centeraverages_2020 |> mutate(Year = "2020-21")
+```
+
+```{r}
+nbalogs_2021 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/2021-22nbadata.csv")
+
+centerlogs_2021 <- nbalogs_2021 |> filter(Pos=="C")
+centeraverages_2021 <- centerlogs_2021|> rename("ThreePointAtt" = `3PA`) |> rename("ThreePointPct" = `3P%`) |> na.omit(centerlogs_2021) |>  summarise(
+  AverageAssists = mean(AST),
+  AverageRebounds = mean(TRB),
+  Average3PTATT = mean(ThreePointAtt),
+  Average3PTPCT = mean(ThreePointPct * 100))
+
+centeraverages_2021 <- centeraverages_2021 |> mutate(Year = "2021-22")
+```
+
+```{r}
+nbalogs_2022 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/2022-23nbadata.csv")
+
+centerlogs_2022 <- nbalogs_2022 |> filter(Pos=="C")
+centeraverages_2022 <- centerlogs_2022|> rename("ThreePointAtt" = `3PA`) |> rename("ThreePointPct" = `3P%`) |> na.omit(centerlogs_2022) |>  summarise(
+  AverageAssists = mean(AST),
+  AverageRebounds = mean(TRB),
+  Average3PTATT = mean(ThreePointAtt),
+  Average3PTPCT = mean(ThreePointPct * 100))
+
+centeraverages_2022 <- centeraverages_2022 |> mutate(Year = "2022-23")
+```
+
+```{r}
+nbalogs_2023 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/2023-24nbadata.csv")
+
+centerlogs_2023 <- nbalogs_2023 |> filter(Pos=="C")
+centeraverages_2023 <- centerlogs_2023|> rename("ThreePointAtt" = `3PA`) |> rename("ThreePointPct" = `3P%`) |> na.omit(centerlogs_2023) |>  summarise(
+  AverageAssists = mean(AST),
+  AverageRebounds = mean(TRB),
+  Average3PTATT = mean(ThreePointAtt),
+  Average3PTPCT = mean(ThreePointPct * 100))
+
+centeraverages_2023 <- centeraverages_2023 |> mutate(Year = "2023-24")
+```
+
+```{r}
+center_averages <- rbind(centeraverages_2000, centeraverages_2001, centeraverages_2002, centeraverages_2003, centeraverages_2004, centeraverages_2005, centeraverages_2006, centeraverages_2007, centeraverages_2008, centeraverages_2009, centeraverages_2010, centeraverages_2011, centeraverages_2012, centeraverages_2013, centeraverages_2014, centeraverages_2015, centeraverages_2016, centeraverages_2017, centeraverages_2018, centeraverages_2019, centeraverages_2020, centeraverages_2021, centeraverages_2022, centeraverages_2023, centeraverages_2024)
+```
+
+```{r}
+center_averages_assists <- center_averages |> select(AverageAssists, Year)
+```
+
+```{r}
+ggplot() + geom_line(data = center_averages_assists, aes(x = Year, y = AverageAssists)) + scale_y_continuous(limits = c(0, 4.5))
 ```
 
