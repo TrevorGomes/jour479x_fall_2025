@@ -1,3 +1,8 @@
+
+Since 2000, basketball as a sport has undergone perhaps the most significant change in its history. The three-point revolution sparked by the Golden State Warriors in the 2010s drastically changed playstyles and coaching philosophies. Nearly every facet of the game has been affected by this, but the most pronounced change has come at the center position.
+
+The offensive responsibilities that used to be reserved for guards – playmaking and shooting, most notably – are now fair game for big men.
+
 ```{r}
 library(tidyverse)
 ```
@@ -20,12 +25,10 @@ centeraverages_2024 <- centerlogs_2024 |> rename("ThreePointAtt" = `3PA`) |> ren
   Average3PTPCT = mean(ThreePointPct * 100),
 )
 
-centeraverages_2024 <- centeraverages_2024 |> mutate(Year = "2024")
+centeraverages_2024 <- centeraverages_2024 |> mutate(Year = "'24")
 ```
 
 My next step would be to load every dataset since 2000, which would be tedious but doable. Then, I could create a line chart showing the change in the four metrics that I measured. The method of calculating the average of all four statistics is fairly simple, which makes my question easier to answer.
-
-The average height of centers - and the analysis of the "small ball" lineups that were prevalent throughout the NBA in the 2010s - would be a bit more difficult though. I would have to link that data to my data imported from Basketball Reference.
 
 ```{r}
 nbalogs_2000 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/2000-01nbadata.csv")
@@ -41,8 +44,12 @@ centeraverages_2000 <- centerlogs_2000|> rename("ThreePointAtt" = `3PA`) |> rena
   Average3PTPCT = mean(ThreePointPct * 100)
 )
 
-centeraverages_2000 <-  centeraverages_2000 |> mutate(Year = "2000")
+centeraverages_2000 <-  centeraverages_2000 |> mutate(Year = "'00")
 ```
+
+My process for refining the data frames was to filter by position and narrow it down to only centers. I'd then rename the three-point attempts and three-point percentage columns because "3PA" and "3P%" cause issues, presumably because of the number in the name. na.omit() filters out any N/A data points. 
+
+To finalize the data frame, I took the average assists, rebounds, three-point percentage, and three-point attempts per game of every center that season, then added a "Year" column so the data was better organized.
 
 ```{r}
 nbalogs_2001 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/2001-02nbadata.csv")
@@ -54,7 +61,7 @@ centeraverages_2001 <- centerlogs_2001|> rename("ThreePointAtt" = `3PA`) |> rena
   Average3PTPCT = mean(ThreePointPct * 100)
 )
 
-centeraverages_2001 <-  centeraverages_2001 |> mutate(Year = "2001")
+centeraverages_2001 <-  centeraverages_2001 |> mutate(Year = "'01")
 ```
 
 ```{r}
@@ -68,7 +75,7 @@ centeraverages_2002 <- centerlogs_2002|> rename("ThreePointAtt" = `3PA`) |> rena
   Average3PTPCT = mean(ThreePointPct * 100)
 )
 
-centeraverages_2002 <- centeraverages_2002 |> mutate(Year = "2002")
+centeraverages_2002 <- centeraverages_2002 |> mutate(Year = "'02")
 ```
 
 ```{r}
@@ -81,7 +88,7 @@ centeraverages_2003 <- centerlogs_2003|> rename("ThreePointAtt" = `3PA`) |> rena
   Average3PTATT = mean(ThreePointAtt),
   Average3PTPCT = mean(ThreePointPct * 100))
 
-centeraverages_2003 <- centeraverages_2003 |> mutate(Year = "2003")
+centeraverages_2003 <- centeraverages_2003 |> mutate(Year = "'03")
 ```
 
 ```{r}
@@ -94,7 +101,7 @@ centeraverages_2004 <- centerlogs_2004|> rename("ThreePointAtt" = `3PA`) |> rena
   Average3PTATT = mean(ThreePointAtt),
   Average3PTPCT = mean(ThreePointPct * 100))
 
-centeraverages_2004 <- centeraverages_2004 |> mutate(Year = "2004")
+centeraverages_2004 <- centeraverages_2004 |> mutate(Year = "'04")
 ```
 
 ```{r}
@@ -107,7 +114,7 @@ centeraverages_2005 <- centerlogs_2005|> rename("ThreePointAtt" = `3PA`) |> rena
   Average3PTATT = mean(ThreePointAtt),
   Average3PTPCT = mean(ThreePointPct * 100))
 
-centeraverages_2005 <- centeraverages_2005 |> mutate(Year = "2005")
+centeraverages_2005 <- centeraverages_2005 |> mutate(Year = "'05")
 ```
 
 ```{r}
@@ -120,7 +127,7 @@ centeraverages_2006 <- centerlogs_2006|> rename("ThreePointAtt" = `3PA`) |> rena
   Average3PTATT = mean(ThreePointAtt),
   Average3PTPCT = mean(ThreePointPct * 100))
 
-centeraverages_2006 <- centeraverages_2006 |> mutate(Year = "2006")
+centeraverages_2006 <- centeraverages_2006 |> mutate(Year = "'06")
 ```
 
 ```{r}
@@ -133,7 +140,7 @@ centeraverages_2007 <- centerlogs_2007|> rename("ThreePointAtt" = `3PA`) |> rena
   Average3PTATT = mean(ThreePointAtt),
   Average3PTPCT = mean(ThreePointPct * 100))
 
-centeraverages_2007 <- centeraverages_2007 |> mutate(Year = "2007")
+centeraverages_2007 <- centeraverages_2007 |> mutate(Year = "'07")
 ```
 
 ```{r}
@@ -146,7 +153,7 @@ centeraverages_2008 <- centerlogs_2008|> rename("ThreePointAtt" = `3PA`) |> rena
   Average3PTATT = mean(ThreePointAtt),
   Average3PTPCT = mean(ThreePointPct * 100))
 
-centeraverages_2008 <- centeraverages_2008 |> mutate(Year = "2008")
+centeraverages_2008 <- centeraverages_2008 |> mutate(Year = "'08")
 ```
 
 ```{r}
@@ -159,7 +166,7 @@ centeraverages_2009 <- centerlogs_2009|> rename("ThreePointAtt" = `3PA`) |> rena
   Average3PTATT = mean(ThreePointAtt),
   Average3PTPCT = mean(ThreePointPct * 100))
 
-centeraverages_2009 <- centeraverages_2009 |> mutate(Year = "2009")
+centeraverages_2009 <- centeraverages_2009 |> mutate(Year = "'09")
 ```
 
 ```{r}
@@ -172,7 +179,7 @@ centeraverages_2010 <- centerlogs_2010|> rename("ThreePointAtt" = `3PA`) |> rena
   Average3PTATT = mean(ThreePointAtt),
   Average3PTPCT = mean(ThreePointPct * 100))
 
-centeraverages_2010 <- centeraverages_2010 |> mutate(Year = "2010")
+centeraverages_2010 <- centeraverages_2010 |> mutate(Year = "'10")
 ```
 
 ```{r}
@@ -185,7 +192,7 @@ centeraverages_2011 <- centerlogs_2011|> rename("ThreePointAtt" = `3PA`) |> rena
   Average3PTATT = mean(ThreePointAtt),
   Average3PTPCT = mean(ThreePointPct * 100))
 
-centeraverages_2011 <- centeraverages_2011 |> mutate(Year = "2011")
+centeraverages_2011 <- centeraverages_2011 |> mutate(Year = "'11")
 ```
 
 ```{r}
@@ -198,7 +205,7 @@ centeraverages_2012 <- centerlogs_2012|> rename("ThreePointAtt" = `3PA`) |> rena
   Average3PTATT = mean(ThreePointAtt),
   Average3PTPCT = mean(ThreePointPct * 100))
 
-centeraverages_2012 <- centeraverages_2012 |> mutate(Year = "2012")
+centeraverages_2012 <- centeraverages_2012 |> mutate(Year = "'12")
 ```
 
 ```{r}
@@ -211,7 +218,7 @@ centeraverages_2013 <- centerlogs_2013|> rename("ThreePointAtt" = `3PA`) |> rena
   Average3PTATT = mean(ThreePointAtt),
   Average3PTPCT = mean(ThreePointPct * 100))
 
-centeraverages_2013 <- centeraverages_2013 |> mutate(Year = "2013")
+centeraverages_2013 <- centeraverages_2013 |> mutate(Year = "'13")
 ```
 
 ```{r}
@@ -224,7 +231,7 @@ centeraverages_2014 <- centerlogs_2014|> rename("ThreePointAtt" = `3PA`) |> rena
   Average3PTATT = mean(ThreePointAtt),
   Average3PTPCT = mean(ThreePointPct * 100))
 
-centeraverages_2014 <- centeraverages_2014 |> mutate(Year = "2014")
+centeraverages_2014 <- centeraverages_2014 |> mutate(Year = "'14")
 ```
 
 ```{r}
@@ -237,7 +244,7 @@ centeraverages_2015 <- centerlogs_2015|> rename("ThreePointAtt" = `3PA`) |> rena
   Average3PTATT = mean(ThreePointAtt),
   Average3PTPCT = mean(ThreePointPct * 100))
 
-centeraverages_2015 <- centeraverages_2015 |> mutate(Year = "2015")
+centeraverages_2015 <- centeraverages_2015 |> mutate(Year = "'15")
 ```
 
 ```{r}
@@ -250,7 +257,7 @@ centeraverages_2016 <- centerlogs_2016|> rename("ThreePointAtt" = `3PA`) |> rena
   Average3PTATT = mean(ThreePointAtt),
   Average3PTPCT = mean(ThreePointPct * 100))
 
-centeraverages_2016 <- centeraverages_2016 |> mutate(Year = "2016")
+centeraverages_2016 <- centeraverages_2016 |> mutate(Year = "'16")
 ```
 
 ```{r}
@@ -263,7 +270,7 @@ centeraverages_2017 <- centerlogs_2017|> rename("ThreePointAtt" = `3PA`) |> rena
   Average3PTATT = mean(ThreePointAtt),
   Average3PTPCT = mean(ThreePointPct * 100))
 
-centeraverages_2017 <- centeraverages_2017 |> mutate(Year = "2017")
+centeraverages_2017 <- centeraverages_2017 |> mutate(Year = "'17")
 ```
 
 ```{r}
@@ -276,7 +283,7 @@ centeraverages_2018 <- centerlogs_2018|> rename("ThreePointAtt" = `3PA`) |> rena
   Average3PTATT = mean(ThreePointAtt),
   Average3PTPCT = mean(ThreePointPct * 100))
 
-centeraverages_2018 <- centeraverages_2018 |> mutate(Year = "2018")
+centeraverages_2018 <- centeraverages_2018 |> mutate(Year = "'18")
 ```
 
 ```{r}
@@ -289,7 +296,7 @@ centeraverages_2019 <- centerlogs_2019|> rename("ThreePointAtt" = `3PA`) |> rena
   Average3PTATT = mean(ThreePointAtt),
   Average3PTPCT = mean(ThreePointPct * 100))
 
-centeraverages_2019 <- centeraverages_2019 |> mutate(Year = "2019")
+centeraverages_2019 <- centeraverages_2019 |> mutate(Year = "'19")
 ```
 
 ```{r}
@@ -302,7 +309,7 @@ centeraverages_2020 <- centerlogs_2020|> rename("ThreePointAtt" = `3PA`) |> rena
   Average3PTATT = mean(ThreePointAtt),
   Average3PTPCT = mean(ThreePointPct * 100))
 
-centeraverages_2020 <- centeraverages_2020 |> mutate(Year = "2020")
+centeraverages_2020 <- centeraverages_2020 |> mutate(Year = "'20")
 ```
 
 ```{r}
@@ -315,7 +322,7 @@ centeraverages_2021 <- centerlogs_2021|> rename("ThreePointAtt" = `3PA`) |> rena
   Average3PTATT = mean(ThreePointAtt),
   Average3PTPCT = mean(ThreePointPct * 100))
 
-centeraverages_2021 <- centeraverages_2021 |> mutate(Year = "2021")
+centeraverages_2021 <- centeraverages_2021 |> mutate(Year = "'21")
 ```
 
 ```{r}
@@ -328,7 +335,7 @@ centeraverages_2022 <- centerlogs_2022|> rename("ThreePointAtt" = `3PA`) |> rena
   Average3PTATT = mean(ThreePointAtt),
   Average3PTPCT = mean(ThreePointPct * 100))
 
-centeraverages_2022 <- centeraverages_2022 |> mutate(Year = "2022")
+centeraverages_2022 <- centeraverages_2022 |> mutate(Year = "'22")
 ```
 
 ```{r}
@@ -341,24 +348,37 @@ centeraverages_2023 <- centerlogs_2023|> rename("ThreePointAtt" = `3PA`) |> rena
   Average3PTATT = mean(ThreePointAtt),
   Average3PTPCT = mean(ThreePointPct * 100))
 
-centeraverages_2023 <- centeraverages_2023 |> mutate(Year = "2023")
+centeraverages_2023 <- centeraverages_2023 |> mutate(Year = "'23")
 ```
 
 ```{r}
 center_averages <- rbind(centeraverages_2000, centeraverages_2001, centeraverages_2002, centeraverages_2003, centeraverages_2004, centeraverages_2005, centeraverages_2006, centeraverages_2007, centeraverages_2008, centeraverages_2009, centeraverages_2010, centeraverages_2011, centeraverages_2012, centeraverages_2013, centeraverages_2014, centeraverages_2015, centeraverages_2016, centeraverages_2017, centeraverages_2018, centeraverages_2019, centeraverages_2020, centeraverages_2021, centeraverages_2022, centeraverages_2023, centeraverages_2024)
 ```
 
+This section combines all the center's season averages from the 2000-01 season to the 2024-25 season so that I have a single data frame showing the average statistics of centers by year. 
+
 ```{r}
 center_averages_assists <- center_averages |> select(AverageAssists, Year)
 ```
 
 ```{r}
-ggplot() + geom_line(data = center_averages_assists, aes(x = Year, y = AverageAssists, group = 1)) + scale_y_continuous(limits = c(0, 4.5))
+ggplot() + geom_line(data = center_averages_assists, aes(x = Year, y = AverageAssists, group = 1)) + scale_y_continuous(limits = c(0, 4.5)) +
+  labs(
+    title = "Assists Per Game from NBA Centers This Century",
+    subtitle= "From the 2000-01 season to 2024-25 season",
+    y = "Average APG by Centers"
+      )
 ```
 
 
 ```{r}
-ggplot() + geom_point(data = centerlogs_2023, aes(x = AST, y = PTS))
+ggplot() + geom_point(data = centerlogs_2023, aes(x = AST, y = PTS)) +
+  labs(
+    title = "Points and Assists Per Game by Centers in 2023-24",
+    subtitle = "Two outliers raise centers' assists average",
+    x = "Assists Per Game",
+    y = "Points Per Game"
+  )
 ```
 
 
@@ -369,9 +389,56 @@ sabonis <- centerlogs_2023 |> filter(Player == "Domantas Sabonis")
 ggplot() +
   geom_point(data = centerlogs_2023, aes(x = AST, y = PTS)) +
   geom_point(data = jokic, aes(x = AST, y = PTS), color = "gold") +
-  geom_point(data = sabonis, aes(x = AST, y = PTS), color = "purple")
+  annotate("text", x = 9, y = 25, label = "Nikola Jokic", color = "black", size = 2.5) +
+  geom_point(data = sabonis, aes(x = AST, y = PTS), color = "purple") +
+  annotate("text", x = 8.2, y = 18, label = "Domantas Sabonis", color = "black", size = 2.5) +
+  labs(
+    title = "Nikola Jokic and Domantas Sabonis Are Anomalies",
+    subtitle = "Both averaged over eight assists per game in 2023-24",
+    y = "Points Per Game",
+    x = "Assists Per Game"
+  )
 ```
 
 Before my presentation, I will update this with chatter explaining my findings and couple of other data visualizations, such as a stacked bar chart displaying the league's total three point attempts over time with the percentage of three-pointers taken by center. I'll also create line charts for rebounds per game, three-point attempts per game, and three-point percentage by year.
 
 All my graphs will be finalized with titles, subtitles, and labels. I also plan on importing height data from NBA.com and appending that to the center_averages data frame.
+
+```{r}
+ggplot() +
+  geom_line(data = center_averages, aes(x = Year, y = Average3PTATT, group = 1)) +
+  labs(
+    title = "Average Three-Point Attempts Per Game Among Centers",
+    subtitle = "Since the 2000-01 season",
+    y = "3PT Attempts Per Game"
+  )
+```
+
+```{r}
+
+centerlogs_2024_fixed <- centerlogs_2024|> rename("ThreePointAtt" = `3PA`)
+
+wemby <- centerlogs_2024_fixed |> filter(Player == "Victor Wembanyama")
+
+ggplot() +
+  geom_point(data = centerlogs_2024_fixed, aes(x = ThreePointAtt, y = PTS)) +
+  geom_point(data = wemby, aes(x = ThreePointAtt, y = PTS), color = "grey") +
+  annotate("text", x = 8.4, y = 23, label = "Victor Wembanyama", color = "black", size = 2.5) +
+  labs(
+    title = "Victor Wembanyama Easily Averaged the Most Three-Point Attempts Among Centers",
+    subtitle = "In the 2024-25 season",
+    x = "Three-Point Attempts Per Game",
+    y = "Points Per Game"
+         )
+```
+
+
+```{r}
+ggplot() +
+  geom_line(data = center_averages, aes(x = Year, y = Average3PTPCT, group = 1)) +
+  labs(
+    title = "Three-Point Percentage Among Centers Has Steadily Increased this Century",
+    subtitle = "Since the 2000-01 season",
+    y = "Average 3PT% Among Centers"
+  )
+```
