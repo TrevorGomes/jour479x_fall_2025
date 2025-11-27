@@ -1,0 +1,12 @@
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+eagleslogs <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2024eagles.csv")
+```
+
+I have this data for every Super Bowl team since 2000, which is the timeframe I'll be focusing on. I'll have to rename a few of the columns that repeat, since this dataframe includes rushing and receiving stats, so "TD" and "Succ%" are repeated as column names. I plan on looking at the rushing yards per team (and how that has changed over time), and how many Super Bowl-winning teams had a 1,000-yard rusher. 
+
+ProFootballReference also has a section that lists a team's league ranking in several rushing statistics (Attempts, Yards, Yards Per Carry, Touchdowns), so I could do a bar chart or line chart showing the league placements of every Super Bowl team since 2000.
