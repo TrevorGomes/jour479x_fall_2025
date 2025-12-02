@@ -1,12 +1,175 @@
 
 ```{r}
 library(tidyverse)
-```
-
-```{r}
-eagleslogs <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2024eagles.csv")
+library(janitor)
 ```
 
 I have this data for every Super Bowl team since 2000, which is the timeframe I'll be focusing on. I'll have to rename a few of the columns that repeat, since this dataframe includes rushing and receiving stats, so "TD" and "Succ%" are repeated as column names. I plan on looking at the rushing yards per team (and how that has changed over time), and how many Super Bowl-winning teams had a 1,000-yard rusher. 
 
 ProFootballReference also has a section that lists a team's league ranking in several rushing statistics (Attempts, Yards, Yards Per Carry, Touchdowns), so I could do a bar chart or line chart showing the league placements of every Super Bowl team since 2000.
+
+```{r}
+eagleslogs2 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2024eagles.csv") |> clean_names() |> rename ("RushTD" = "td_9") |> filter(pos == "RB") |> select(player, att, yds, y_a, RushTD, y_scm, rrtd, touch) |> mutate(Team = "2024 Eagles")
+eaglesplayoffslogs2 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2024eaglesplayoffs.csv") |> rename("Yards" = `Yds...8`) |> rename ("RushTD" = `TD...9`) |> rename("YPC" = "Y/A") |> filter(Pos == "RB") |> select(Player, Att, Yards, YPC, RushTD, YScm, RRTD, Touch) |> mutate(Team = "2024 Eagles")
+eaglesleaguerank2 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2024eaglesleaguerank.csv") |> rename("RushAttempts" = "Att...16") |> rename("RushYards" = `Yds...17`) |> rename("RushTDs" = `TD...18`) |> rename("YPC" = "Y/A") |>  filter(Player == "Lg Rank Offense") |> select(RushAttempts, RushYards, RushTDs, YPC) |> mutate(Team = "2024 Eagles")
+```
+
+```{r}
+chiefslogs3 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2023chiefs.csv") |> clean_names() |> rename ("RushTD" = "td_9") |> filter(pos == "RB") |> select(player, att, yds, y_a, RushTD, y_scm, rrtd, touch)  |> mutate(Team = "2023 Chiefs")
+chiefsplayoffslogs3 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2023chiefsplayoffs.csv") |> rename("Yards" = `Yds...8`) |> rename ("RushTD" = `TD...9`) |> rename("YPC" = "Y/A") |> filter(Pos == "RB") |> select(Player, Att, Yards, YPC, RushTD, YScm, RRTD, Touch)  |> mutate(Team = "2023 Chiefs")
+chiefsleaguerank3 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2023chiefsleaguerank.csv")|> rename("RushAttempts" = "Att...16") |> rename("RushYards" = `Yds...17`) |> rename("RushTDs" = `TD...18`) |> rename("YPC" = "Y/A") |>  filter(Player == "Lg Rank Offense") |> select(RushAttempts, RushYards, RushTDs, YPC) |> mutate(Team = "2023 Chiefs")
+```
+
+```{r}
+chiefslogs2 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2022chiefs.csv") |> clean_names() |> rename ("RushTD" = "td_9") |> filter(pos == "RB") |> select(player, att, yds, y_a, RushTD, y_scm, rrtd, touch) |>  mutate(Team = "2022 Chiefs")
+chiefsplayoffslogs2 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2022chiefsplayoffs.csv")|> rename("Yards" = `Yds...8`) |> rename ("RushTD" = `TD...9`) |> rename("YPC" = "Y/A") |> filter(Pos == "RB") |> select(Player, Att, Yards, YPC, RushTD, YScm, RRTD, Touch) |> mutate(Team = "2022 Chiefs")
+chiefsleaguerank2 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2022chiefsleaguerank.csv")|> rename("RushAttempts" = "Att...16") |> rename("RushYards" = `Yds...17`) |> rename("RushTDs" = `TD...18`) |> rename("YPC" = "Y/A") |>  filter(Player == "Lg Rank Offense") |> select(RushAttempts, RushYards, RushTDs, YPC) |> mutate(Team = "2022 Chiefs")
+```
+
+```{r}
+ramslogs <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2021rams.csv") |> clean_names() |> rename ("RushTD" = "td_9") |> filter(pos == "RB") |> select(player, att, yds, y_a, RushTD, y_scm, rrtd, touch) |> mutate(Team = "2021 Rams")
+ramsplayoffslogs <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2021ramsplayoffs.csv") |> rename("Yards" = `Yds...8`) |> rename ("RushTD" = `TD...9`) |> rename("YPC" = "Y/A") |> filter(Pos == "RB") |> select(Player, Att, Yards, YPC, RushTD, YScm, RRTD, Touch) |> mutate(Team = "2021 Rams")
+ramsleaguerank <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2021ramsleaguerank.csv")|> rename("RushAttempts" = "Att...16") |> rename("RushYards" = `Yds...17`) |> rename("RushTDs" = `TD...18`) |> rename("YPC" = "Y/A") |>  filter(Player == "Lg Rank Offense") |> select(RushAttempts, RushYards, RushTDs, YPC) |> mutate(Team = "2021 Rams")
+```
+
+```{r}
+bucslogs2 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2020bucs.csv") |> clean_names() |> rename ("RushTD" = "td_9") |> filter(pos == "RB") |> select(player, att, yds, y_a, RushTD, y_scm, rrtd, touch) |> mutate(Team = "2020 Bucs")
+bucsplayoffslogs2 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2020bucsplayoffs.csv") |> rename("Yards" = `Yds...8`) |> rename ("RushTD" = `TD...9`) |> rename("YPC" = "Y/A") |> filter(Pos == "RB") |> select(Player, Att, Yards, YPC, RushTD, YScm, RRTD, Touch) |> mutate(Team = "2020 Bucs")
+bucsleaguerank2 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2020bucsleaguerank.csv")|> rename("RushAttempts" = "Att...16") |> rename("RushYards" = `Yds...17`) |> rename("RushTDs" = `TD...18`) |> rename("YPC" = "Y/A") |>  filter(Player == "Lg Rank Offense") |> select(RushAttempts, RushYards, RushTDs, YPC) |> mutate(Team = "2020 Bucs")
+```
+
+```{r}
+chiefslogs1 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2019chiefs.csv") |> clean_names() |> rename ("RushTD" = "td_9") |> filter(pos == "RB") |> select(player, att, yds, y_a, RushTD, y_scm, rrtd, touch) |> mutate(Team = "2019 Chiefs")
+chiefsplayoffslogs1 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2019chiefsplayoffs.csv") |> rename("Yards" = `Yds...8`) |> rename ("RushTD" = `TD...9`) |> rename("YPC" = "Y/A") |> filter(Pos == "RB") |> select(Player, Att, Yards, YPC, RushTD, YScm, RRTD, Touch) |> mutate(Team = "2019 Chiefs")
+chiefsleaguerank1 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2019chiefsleaguerank.csv")|> rename("RushAttempts" = "Att...16") |> rename("RushYards" = `Yds...17`) |> rename("RushTDs" = `TD...18`) |> rename("YPC" = "Y/A") |>  filter(Player == "Lg Rank Offense") |> select(RushAttempts, RushYards, RushTDs, YPC) |> mutate(Team = "2019 Chiefs")
+```
+
+```{r}
+patriotslogs6 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2018patriots.csv") |> clean_names() |> rename ("RushTD" = "td_9") |> filter(pos == "RB") |> select(player, att, yds, y_a, RushTD, y_scm, rrtd, touch) |> mutate(Team = "2018 Patriots")
+patriotsplayoffslogs6 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2018patriotsplayoffs.csv")|> rename("Yards" = `Yds...8`) |> rename ("RushTD" = `TD...9`) |> rename("YPC" = "Y/A") |> filter(Pos == "RB") |> select(Player, Att, Yards, YPC, RushTD, YScm, RRTD, Touch) |> mutate(Team = "2018 Patriots")
+patriotsleaguerank6 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2018patriotsleaguerank.csv")|> rename("RushAttempts" = "Att...16") |> rename("RushYards" = `Yds...17`) |> rename("RushTDs" = `TD...18`) |> rename("YPC" = "Y/A") |>  filter(Player == "Lg Rank Offense") |> select(RushAttempts, RushYards, RushTDs, YPC) |> mutate(Team = "2018 Patriots")
+```
+
+```{r}
+eagleslogs1 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2017eagles.csv") |> clean_names() |> rename ("RushTD" = "td_9") |> filter(pos == "RB") |> select(player, att, yds, y_a, RushTD, y_scm, rrtd, touch) |> mutate(Team = "2017 Eagles")
+eaglesplayoffslogs1 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2017eaglesplayoffs.csv") |> rename("Yards" = `Yds...8`) |> rename ("RushTD" = `TD...9`) |> rename("YPC" = "Y/A") |> filter(Pos == "RB") |> select(Player, Att, Yards, YPC, RushTD, YScm, RRTD, Touch) |> mutate(Team = "2017 Eagles")
+eaglesleaguerank1 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2017eaglesleaguerank.csv")|> rename("RushAttempts" = "Att...16") |> rename("RushYards" = `Yds...17`) |> rename("RushTDs" = `TD...18`) |> rename("YPC" = "Y/A") |>  filter(Player == "Lg Rank Offense") |> select(RushAttempts, RushYards, RushTDs, YPC) |> mutate(Team = "2017 Eagles")
+```
+
+```{r}
+patriotslogs5 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2016patriots.csv") |> clean_names() |> rename ("RushTD" = "td_9") |> filter(pos == "RB") |> select(player, att, yds, y_a, RushTD, y_scm, rrtd, touch) |> mutate(Team = "2016 Patriots")
+patriotsplayoffslogs5 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2016patriotsplayoffs.csv") |> rename("Yards" = `Yds...8`) |> rename ("RushTD" = `TD...9`) |> rename("YPC" = "Y/A") |> filter(Pos == "RB") |> select(Player, Att, Yards, YPC, RushTD, YScm, RRTD, Touch) |> mutate(Team = "2016 Patriots")
+patriotsleaguerank5 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2016patriotsleaguerank.csv")|> rename("RushAttempts" = "Att...16") |> rename("RushYards" = `Yds...17`) |> rename("RushTDs" = `TD...18`) |> rename("YPC" = "Y/A") |>  filter(Player == "Lg Rank Offense") |> select(RushAttempts, RushYards, RushTDs, YPC) |> mutate(Team = "2016 Patriots")
+```
+
+```{r}
+broncoslogs <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2015broncos.csv") |> clean_names() |> rename ("RushTD" = "td_9") |> filter(pos == "RB") |> select(player, att, yds, y_a, RushTD, y_scm, rrtd, touch) |> mutate(Team = "2015 Broncos")
+broncosplayoffslogs <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2015broncosplayoffs.csv")|> rename("Yards" = `Yds...8`) |> rename ("RushTD" = `TD...9`) |> rename("YPC" = "Y/A") |> filter(Pos == "RB") |> select(Player, Att, Yards, YPC, RushTD, YScm, RRTD, Touch) |> mutate(Team = "2015 Broncos")
+broncosleaguerank <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2015broncosleaguerank.csv")|> rename("RushAttempts" = "Att...16") |> rename("RushYards" = `Yds...17`) |> rename("RushTDs" = `TD...18`) |> rename("YPC" = "Y/A") |>  filter(Player == "Lg Rank Offense") |> select(RushAttempts, RushYards, RushTDs, YPC) |> mutate(Team = "2015 Broncos")
+```
+
+```{r}
+patriotslogs4 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2014patriots.csv") |> clean_names() |> rename ("RushTD" = "td_9") |> filter(pos == "RB") |> select(player, att, yds, y_a, RushTD, y_scm, rrtd, touch) |> mutate(Team = "2014 Patriots")
+patriotsplayoffslogs4 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2014patriotsplayoffs.csv")|> rename("Yards" = `Yds...8`) |> rename ("RushTD" = `TD...9`) |> rename("YPC" = "Y/A") |> filter(Pos == "RB") |> select(Player, Att, Yards, YPC, RushTD, YScm, RRTD, Touch) |> mutate(Team = "2014 Patriots")
+patriotsleaguerank4 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2014patriotsleaguerank.csv")|> rename("RushAttempts" = "Att...16") |> rename("RushYards" = `Yds...17`) |> rename("RushTDs" = `TD...18`) |> rename("YPC" = "Y/A") |>  filter(Player == "Lg Rank Offense") |> select(RushAttempts, RushYards, RushTDs, YPC) |> mutate(Team = "2014 Patriots")
+```
+
+```{r}
+seahawkslogs <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2013seahawks.csv") |> clean_names() |> rename ("RushTD" = "td_9") |> filter(pos == "RB") |> select(player, att, yds, y_a, RushTD, y_scm, rrtd, touch) |> mutate(Team = "2013 Seahawks")
+seahawksplayoffslogs <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2013seahawksplayoffs.csv")|> rename("Yards" = `Yds...8`) |> rename ("RushTD" = `TD...9`) |> rename("YPC" = "Y/A") |> filter(Pos == "RB") |> select(Player, Att, Yards, YPC, RushTD, YScm, RRTD, Touch) |> mutate(Team = "2013 Seahawks")
+seahawksleaguerank <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2013seahawksleaguerank.csv")|> rename("RushAttempts" = "Att...16") |> rename("RushYards" = `Yds...17`) |> rename("RushTDs" = `TD...18`) |> rename("YPC" = "Y/A") |>  filter(Player == "Lg Rank Offense") |> select(RushAttempts, RushYards, RushTDs, YPC) |> mutate(Team = "2013 Seahawks")
+```
+
+```{r}
+ravenslogs2 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2012ravens.csv") |> clean_names() |> rename ("RushTD" = "td_9") |> filter(pos == "RB") |> select(player, att, yds, y_a, RushTD, y_scm, rrtd, touch) |> mutate(Team = "2012 Ravens")
+ravensplayoffslogs2<- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2012ravensplayoffs.csv") |> rename("Yards" = `Yds...8`) |> rename ("RushTD" = `TD...9`) |> rename("YPC" = "Y/A") |> filter(Pos == "RB") |> select(Player, Att, Yards, YPC, RushTD, YScm, RRTD, Touch) |> mutate(Team = "2012 Ravens")
+ravensleaguerank2 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2012ravensleaguerank.csv")|> rename("RushAttempts" = "Att...16") |> rename("RushYards" = `Yds...17`) |> rename("RushTDs" = `TD...18`) |> rename("YPC" = "Y/A") |>  filter(Player == "Lg Rank Offense") |> select(RushAttempts, RushYards, RushTDs, YPC) |> mutate(Team = "2012 Ravens")
+```
+
+```{r}
+giantslogs2 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2011giants.csv") |> clean_names() |> rename ("RushTD" = "td_9") |> filter(pos == "RB") |> select(player, att, yds, y_a, RushTD, y_scm, rrtd, touch) |> mutate(Team = "2011 Giants")
+giantsplayoffslogs2 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2011giantsplayoffs.csv")|> rename("Yards" = `Yds...8`) |> rename ("RushTD" = `TD...9`) |> rename("YPC" = "Y/A") |> filter(Pos == "RB") |> select(Player, Att, Yards, YPC, RushTD, YScm, RRTD, Touch) |> mutate(Team = "2011 Giants")
+giantsleaguerank2 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2011giantsleaguerank.csv")|> rename("RushAttempts" = "Att...16") |> rename("RushYards" = `Yds...17`) |> rename("RushTDs" = `TD...18`) |> rename("YPC" = "Y/A") |>  filter(Player == "Lg Rank Offense") |> select(RushAttempts, RushYards, RushTDs, YPC) |> mutate(Team = "2011 Giants")
+```
+
+```{r}
+packerslogs <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2010packers.csv") |> clean_names() |> rename ("RushTD" = "td_9") |> filter(pos == "RB") |> select(player, att, yds, y_a, RushTD, y_scm, rrtd, touch) |> mutate(Team = "2010 Packers")
+packersplayoffslogs <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2010packersplayoffs.csv") |> rename("Yards" = `Yds...8`) |> rename ("RushTD" = `TD...9`) |> rename("YPC" = "Y/A") |> filter(Pos == "RB") |> select(Player, Att, Yards, YPC, RushTD, YScm, RRTD, Touch) |> mutate(Team = "2010 Packers")
+packersleaguerank <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2010packersleaguerank.csv")|> rename("RushAttempts" = "Att...16") |> rename("RushYards" = `Yds...17`) |> rename("RushTDs" = `TD...18`) |> rename("YPC" = "Y/A") |>  filter(Player == "Lg Rank Offense") |> select(RushAttempts, RushYards, RushTDs, YPC) |> mutate(Team = "2010 Packers")
+```
+
+```{r}
+saintslogs <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2009saints.csv") |> clean_names() |> rename ("RushTD" = "td_9") |> filter(pos == "RB") |> select(player, att, yds, y_a, RushTD, y_scm, rrtd, touch) |> mutate(Team = "2009 Saints")
+saintsplayoffslogs <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2009saintsplayoffs.csv")|> rename("Yards" = `Yds...8`) |> rename ("RushTD" = `TD...9`) |> rename("YPC" = "Y/A") |> filter(Pos == "RB") |> select(Player, Att, Yards, YPC, RushTD, YScm, RRTD, Touch) |> mutate(Team = "2009 Saints")
+saintsleaguerank <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2009saintsleaguerank.csv")|> rename("RushAttempts" = "Att...16") |> rename("RushYards" = `Yds...17`) |> rename("RushTDs" = `TD...18`) |> rename("YPC" = "Y/A") |>  filter(Player == "Lg Rank Offense") |> select(RushAttempts, RushYards, RushTDs, YPC) |> mutate(Team = "2009 Saints")
+```
+
+```{r}
+steelerslogs2 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2008steelers.csv") |> clean_names() |> rename ("RushTD" = "td_9") |> filter(pos == "RB") |> select(player, att, yds, y_a, RushTD, y_scm, rrtd, touch) |> mutate(Team = "2008 Steelers")
+steelersplayoffslogs2 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2008steelersplayoffs.csv")|> rename("Yards" = `Yds...8`) |> rename ("RushTD" = `TD...9`) |> rename("YPC" = "Y/A") |> filter(Pos == "RB") |> select(Player, Att, Yards, YPC, RushTD, YScm, RRTD, Touch) |> mutate(Team = "2008 Steelers")
+steelersleaguerank2 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2008steelersleaguerank.csv")|> rename("RushAttempts" = "Att...16") |> rename("RushYards" = `Yds...17`) |> rename("RushTDs" = `TD...18`) |> rename("YPC" = "Y/A") |>  filter(Player == "Lg Rank Offense") |> select(RushAttempts, RushYards, RushTDs, YPC) |> mutate(Team = "2008 Steelers")
+```
+
+```{r}
+giantslogs1 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2007giants.csv") |> clean_names() |> rename ("RushTD" = "td_9") |> filter(pos == "RB") |> select(player, att, yds, y_a, RushTD, y_scm, rrtd, touch) |> mutate(Team = "2007 Giants")
+giantsplayoffslogs1 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2007giantsplayoffs.csv")|> rename("Yards" = `Yds...8`) |> rename ("RushTD" = `TD...9`) |> rename("YPC" = "Y/A") |> filter(Pos == "RB") |> select(Player, Att, Yards, YPC, RushTD, YScm, RRTD, Touch) |> mutate(Team = "2007 Giants")
+giantsleaguerank1 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2007giantsleaguerank.csv")|> rename("RushAttempts" = "Att...16") |> rename("RushYards" = `Yds...17`) |> rename("RushTDs" = `TD...18`) |> rename("YPC" = "Y/A") |>  filter(Player == "Lg Rank Offense") |> select(RushAttempts, RushYards, RushTDs, YPC) |> mutate(Team = "2007 Giants")
+```
+
+```{r}
+coltslogs <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2006colts.csv") |> clean_names() |> rename ("RushTD" = "td_9") |> filter(pos == "RB") |> select(player, att, yds, y_a, RushTD, y_scm, rrtd, touch) |> mutate(Team = "2006 Colts")
+coltsplayoffslogs <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2006coltsplayoffs.csv")|> rename("Yards" = `Yds...8`) |> rename ("RushTD" = `TD...9`) |> rename("YPC" = "Y/A") |> filter(Pos == "RB") |> select(Player, Att, Yards, YPC, RushTD, YScm, RRTD, Touch) |> mutate(Team = "2006 Colts")
+coltsleaguerank <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2006coltsleaguerank.csv")|> rename("RushAttempts" = "Att...16") |> rename("RushYards" = `Yds...17`) |> rename("RushTDs" = `TD...18`) |> rename("YPC" = "Y/A") |>  filter(Player == "Lg Rank Offense") |> select(RushAttempts, RushYards, RushTDs, YPC) |> mutate(Team = "2006 Colts")
+```
+
+```{r}
+steelerslogs1 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2005steelers.csv") |> clean_names() |> rename ("RushTD" = "td_9") |> filter(pos == "RB") |> select(player, att, yds, y_a, RushTD, y_scm, rrtd, touch) |> mutate(Team = "2005 Steelers")
+steelersplayoffslogs1 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2005steelersplayoffs.csv")|> rename("Yards" = `Yds...8`) |> rename ("RushTD" = `TD...9`) |> rename("YPC" = "Y/A") |> filter(Pos == "RB") |> select(Player, Att, Yards, YPC, RushTD, YScm, RRTD, Touch) |> mutate(Team = "2005 Steelers")
+steelersleaguerank1 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2005steelersleaguerank.csv")|> rename("RushAttempts" = "Att...16") |> rename("RushYards" = `Yds...17`) |> rename("RushTDs" = `TD...18`) |> rename("YPC" = "Y/A") |>  filter(Player == "Lg Rank Offense") |> select(RushAttempts, RushYards, RushTDs, YPC) |> mutate(Team = "2005 Steelers")
+```
+
+```{r}
+patriotslogs3 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2004patriots.csv") |> clean_names() |> rename ("RushTD" = "td_9") |> filter(pos == "RB") |> select(player, att, yds, y_a, RushTD, y_scm, rrtd, touch) |> mutate(Team = "2004 Patriots")
+patriotsplayoffslogs3 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2004patriotsplayoffs.csv") |> rename("Yards" = `Yds...8`) |> rename ("RushTD" = `TD...9`) |> rename("YPC" = "Y/A") |> filter(Pos == "RB") |> select(Player, Att, Yards, YPC, RushTD, YScm, RRTD, Touch) |> mutate(Team = "2004 Patriots")
+patriotsleaguerank3 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2004patriotsleaguerank.csv")|> rename("RushAttempts" = "Att...16") |> rename("RushYards" = `Yds...17`) |> rename("RushTDs" = `TD...18`) |> rename("YPC" = "Y/A") |>  filter(Player == "Lg Rank Offense") |> select(RushAttempts, RushYards, RushTDs, YPC) |> mutate(Team = "2004 Patriots")
+```
+
+```{r}
+patriotslogs2 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2003patriots.csv") |> clean_names() |> rename ("RushTD" = "td_9") |> filter(pos == "RB") |> select(player, att, yds, y_a, RushTD, y_scm, rrtd, touch) |> mutate(Team = "2003 Patriots")
+patriotsplayoffslogs2 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2003patriotsplayoffs.csv") |> rename("Yards" = `Yds...8`) |> rename ("RushTD" = `TD...9`) |> rename("YPC" = "Y/A") |> filter(Pos == "RB") |> select(Player, Att, Yards, YPC, RushTD, YScm, RRTD, Touch) |> mutate(Team = "2003 Patriots")
+patriotsleaguerank2 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2003patriotsleaguerank.csv")|> rename("RushAttempts" = "Att...16") |> rename("RushYards" = `Yds...17`) |> rename("RushTDs" = `TD...18`) |> rename("YPC" = "Y/A") |>  filter(Player == "Lg Rank Offense") |> select(RushAttempts, RushYards, RushTDs, YPC) |> mutate(Team = "2003 Patriots")
+```
+
+```{r}
+bucslogs1 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2002bucs.csv") |> clean_names() |> rename ("RushTD" = "td_9") |> filter(pos == "RB") |> select(player, att, yds, y_a, RushTD, y_scm, rrtd, touch) |> mutate(Team = "2002 Bucs")
+bucsplayoffslogs <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2002bucsplayoffs.csv") |> rename("Yards" = `Yds...8`) |> rename ("RushTD" = `TD...9`) |> rename("YPC" = "Y/A") |> filter(Pos == "RB") |> select(Player, Att, Yards, YPC, RushTD, YScm, RRTD, Touch) |> mutate(Team = "2002 Bucs")
+bucsleaguerank1 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2002bucsleaguerank.csv")|> rename("RushAttempts" = "Att...16") |> rename("RushYards" = `Yds...17`) |> rename("RushTDs" = `TD...18`) |> rename("YPC" = "Y/A") |>  filter(Player == "Lg Rank Offense") |> select(RushAttempts, RushYards, RushTDs, YPC) |> mutate(Team = "2002 Bucs")
+```
+
+```{r}
+patriotslogs1 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2001patriots.csv") |> clean_names() |> rename ("RushTD" = "td_9") |> filter(pos == "RB") |> select(player, att, yds, y_a, RushTD, y_scm, rrtd, touch) |> mutate(Team = "2001 Patriots")
+patriotsplayoffslogs1 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2001patriotsplayoffs.csv")|> rename("Yards" = `Yds...8`) |> rename ("RushTD" = `TD...9`) |> rename("YPC" = "Y/A") |> filter(Pos == "RB") |> select(Player, Att, Yards, YPC, RushTD, YScm, RRTD, Touch) |> mutate(Team = "2001 Patriots")
+patriotsleaguerank1 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2001patriotsleaguerank.csv")|> rename("RushAttempts" = "Att...16") |> rename("RushYards" = `Yds...17`) |> rename("RushTDs" = `TD...18`) |> rename("YPC" = "Y/A") |>  filter(Player == "Lg Rank Offense") |> select(RushAttempts, RushYards, RushTDs, YPC) |> mutate(Team = "2001 Patriots")
+```
+
+```{r}
+ravenslogs1 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2000ravens.csv") |> clean_names()|> rename ("RushTD" = "td_9") |> rename("yds" = `yds_8`) |> filter(pos == "RB") |> select(player, att, yds, y_a, RushTD, y_scm, rrtd, touch) |> mutate(Team = "2000 Ravens")
+ravensplayoffslogs1 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2000ravensplayoffs.csv")|> rename("Yards" = `Yds...8`) |> rename ("RushTD" = `TD...9`) |> rename("YPC" = "Y/A") |> filter(Pos == "RB") |> select(Player, Att, Yards, YPC, RushTD, YScm, RRTD, Touch) |> mutate(Team = "2000 Ravens")
+ravensleaguerank1 <- read_csv("~/GitHub/jour479x_fall_2025/presentations/Presentation2/2000ravensleaguerank.csv")|> rename("RushAttempts" = "Att...16") |> rename("RushYards" = `Yds...17`) |> rename("RushTDs" = `TD...18`) |> rename("YPC" = "Y/A") |>  filter(Player == "Lg Rank Offense") |> select(RushAttempts, RushYards, RushTDs, YPC) |> mutate(Team = "2000 Ravens")
+```
+
+```{r}
+logs <- rbind(eagleslogs2, chiefslogs3, chiefslogs2, ramslogs, bucslogs2, chiefslogs1, patriotslogs6, eagleslogs1, patriotslogs5, broncoslogs, patriotslogs4, seahawkslogs, ravenslogs2, giantslogs2, packerslogs, saintslogs, steelerslogs2, giantslogs1, coltslogs, steelerslogs1, patriotslogs3, patriotslogs2, bucslogs1, patriotslogs1, ravenslogs1)
+```
+
+```{r}
+playoffslogs <- rbind(eaglesplayoffslogs2, chiefsplayoffslogs3, chiefsplayoffslogs2, ramsplayoffslogs, bucsplayoffslogs2, chiefsplayoffslogs1, patriotsplayoffslogs6, eaglesplayoffslogs1, patriotsplayoffslogs5, broncosplayoffslogs, patriotsplayoffslogs4, seahawksplayoffslogs, ravensplayoffslogs2, giantsplayoffslogs2, packersplayoffslogs, saintsplayoffslogs, steelersplayoffslogs2, giantsplayoffslogs1, coltsplayoffslogs, steelersplayoffslogs1, patriotsplayoffslogs3, patriotsplayoffslogs2, bucsplayoffslogs, patriotsplayoffslogs1, ravensplayoffslogs1)
+```
+
+```{r}
+leagueranklogs <- rbind(eaglesleaguerank2, chiefsleaguerank3, chiefsleaguerank2, ramsleaguerank, bucsleaguerank2, chiefsleaguerank1, patriotsleaguerank6, eaglesleaguerank1, patriotsleaguerank5, broncosleaguerank, patriotsleaguerank4, seahawksleaguerank, ravensleaguerank2, giantsleaguerank2, packersleaguerank, saintsleaguerank, steelersleaguerank2, giantsleaguerank1, coltsleaguerank, steelersleaguerank1, patriotsleaguerank3, patriotsleaguerank2, bucsleaguerank1, patriotsleaguerank1, ravensleaguerank1)
+```
+
+My initial question has not changed, though I've narrowed my scope to only the NFL, rather than also including college football. Just from a cursory glance at the data, it seems that elite running backs are not necessary to winning a Super Bowl, but I'd like to put numbers to this claim. 15 of the past 25 Super Bowl champions did not have a 1,000 yard rusher, which I will express in my presentation.
+
+For the season-long rushing numbers and playoff rushing statistics, I plan on visualizing those using a bar chart or line chart, then contextualizing that data with the league-wide ranking. So for the 2024 Eagles, I would show their running backs' statistics from the regular season and postseason, then show that they were near the top of the league in many rushing metrics.
