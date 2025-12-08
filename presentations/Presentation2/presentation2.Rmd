@@ -2,6 +2,7 @@
 ```{r}
 library(tidyverse)
 library(janitor)
+library(ggplot2)
 ```
 
 I have this data for every Super Bowl team since 2000, which is the timeframe I'll be focusing on. I'll have to rename a few of the columns that repeat, since this dataframe includes rushing and receiving stats, so "TD" and "Succ%" are repeated as column names. I plan on looking at the rushing yards per team (and how that has changed over time), and how many Super Bowl-winning teams had a 1,000-yard rusher. 
@@ -170,6 +171,36 @@ playoffslogs <- rbind(eaglesplayoffslogs2, chiefsplayoffslogs3, chiefsplayoffslo
 leagueranklogs <- rbind(eaglesleaguerank2, chiefsleaguerank3, chiefsleaguerank2, ramsleaguerank, bucsleaguerank2, chiefsleaguerank1, patriotsleaguerank6, eaglesleaguerank1, patriotsleaguerank5, broncosleaguerank, patriotsleaguerank4, seahawksleaguerank, ravensleaguerank2, giantsleaguerank2, packersleaguerank, saintsleaguerank, steelersleaguerank2, giantsleaguerank1, coltsleaguerank, steelersleaguerank1, patriotsleaguerank3, patriotsleaguerank2, bucsleaguerank1, patriotsleaguerank1, ravensleaguerank1)
 ```
 
+```{r}
+leagueranklogs <- leagueranklogs |> mutate(Mean = mean(RushYards))
+```
+
+
 My initial question has not changed, though I've narrowed my scope to only the NFL, rather than also including college football. Just from a cursory glance at the data, it seems that elite running backs are not necessary to winning a Super Bowl, but I'd like to put numbers to this claim. 15 of the past 25 Super Bowl champions did not have a 1,000 yard rusher, which I will express in my presentation.
 
 For the season-long rushing numbers and playoff rushing statistics, I plan on visualizing those using a bar chart or line chart, then contextualizing that data with the league-wide ranking. So for the 2024 Eagles, I would show their running backs' statistics from the regular season and postseason, then show that they were near the top of the league in many rushing metrics.
+
+```{r}
+ggplot() +
+  geom_bar(
+    data = leagueranklogs,
+    aes(
+      x = Team,
+      weight = RushYards
+    )
+  ) + geom_hline(yintercept = 14.92, linetype = "dashed") +
+  coord_flip() +
+  labs(
+    title = "Super Bowl Champions' Rushing Production Has Varied",
+    subtitle = "Since 2000, Super Bowl champions have ranked roughly in the middle of the pack in rushing \nyards on average",
+    x = "Team",
+    y = "Total Rushing Yards League Ranking"
+  )
+```
+
+The only question I have as of right now is about creating a beeswarm plot showing the number of Super Bowl champions in each range of league ranking (how many ranked from first to fifth in the league in rushing yards, how many were ranked between sixth and 10th, etc.). The x-axis of the beeswarm plot would default to displaying every individual ranking, so I need to create a column that designates which team falls in which range, I'm just unsure of how to do that.
+
+For the bar chart I created, I'd like to label the dotted line (representing the average league ranking of every Super Bowl team since 2000) to clarify what it is and what the exact value is. Would a legend or an annotation in the chart work better? If a legend would work, how do I create a legend that doesn't overlap with the chart?
+
+I also have a question that's less about syntax or RStudio itself, but about your advice on what would be best to include in the project. Do you think I should create a data visualization showing the raw rushing numbers (yards, TDs, yards per carry, etc.) of the Super Bowl-winning teams, or does their league ranking illustrate how productive they were on the ground? 
+
